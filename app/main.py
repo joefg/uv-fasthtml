@@ -12,12 +12,14 @@ app, route = fast_app()
 @route("/")
 def home():
     return page(
+        "uv-fasthtml",
         home_page()
     )
 
 @route("/shout/{name}")
 def get_name(name: str):
     return page(
+        "uv-fasthtml",
         shout_page(name)
     )
 
@@ -31,6 +33,7 @@ def not_found(path: str):
         cls="container"
     )
     return page(
+        "404: Page Not Found",
         error
     )
 

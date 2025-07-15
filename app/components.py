@@ -31,10 +31,18 @@ def footer():
         )
     )
 
-def page_content(content):
-    return (
+def page_content(title, content):
+    head = Head(
+        Title(title),
+        Meta(name="viewport", content="width=device-width,initial_scale=1.0"),
+        Meta(name="description", content=f"{title} - Built with FastHTML")
+    )
+    body = Body(
         header(),
         content,
         footer()
     )
-
+    return (
+        head,
+        body
+    )
