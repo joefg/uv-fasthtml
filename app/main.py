@@ -7,6 +7,8 @@ from models.shout import shout as shout_model
 from pages.home import home as home_page
 from pages.shout import shout as shout_page
 
+import config
+
 app, route = fast_app()
 
 @route("/")
