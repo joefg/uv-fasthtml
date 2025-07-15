@@ -1,0 +1,11 @@
+[project]
+name = "uv-fasthtml"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mypy>=1.17.0",
+    "pylint>=3.3.7",
+    "python-fasthtml>=0.12.21",
+]

@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function help(){
+cat << EOF
+uv-fasthtml
+
+help        : Display help text
+restore     : Fetch dependencies
+serve       : Spawn a server
+lint        : Lint codebase
+unit        : Run unit tests
+EOF
+}
+
+function run_restore(){
+	uv sync
+}
+
+function run_serve(){
+	uv run app/main.py
+}
+
+function run_lint(){
+	uv run mypy "$THISDIR"/app/
+	uv run pylint "$THISDIR"/app/
+}
+
+function run_unit(){
+	uv run pytest
+}
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		help)
+			help "$@"
+			;;
+		restore)
+			run_restore
+			;;
+		serve)
+			run_serve
+			;;
+		lint)
+			run_lint
+			;;
+		unit)
+			run_unit
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"

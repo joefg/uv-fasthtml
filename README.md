@@ -1,0 +1,1 @@
+# uv-fasthtml project template
