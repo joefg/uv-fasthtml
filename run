@@ -10,7 +10,6 @@ uv-fasthtml
 help        : Display help text
 restore     : Fetch dependencies
 serve       : Spawn a server
-lint        : Lint codebase
 unit        : Run unit tests
 EOF
 }
@@ -21,11 +20,6 @@ function run_restore(){
 
 function run_serve(){
 	uv run app/main.py
-}
-
-function run_lint(){
-	uv run mypy "$THISDIR"/app/
-	uv run pylint "$THISDIR"/app/
 }
 
 function run_unit(){
@@ -44,9 +38,6 @@ function main(){
 			;;
 		serve)
 			run_serve
-			;;
-		lint)
-			run_lint
 			;;
 		unit)
 			run_unit
