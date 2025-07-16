@@ -21,8 +21,8 @@ class Database:
             connection.execute('pragma journal_mode=wal')
             cursor = connection.cursor()
             cursor.executescript('''
-                -- Create schema_history table for migrations.
-                create table if not exists schema_history (
+                -- Create migrations history table.
+                create table if not exists migrations (
                     id integer primary key autoincrement,
                     script text not null,
                     executed_at timestamp not null default current_timestamp
@@ -30,34 +30,34 @@ class Database:
 
                 -- Insert an entry into that table to kick off
                 -- the autoincrement
-                insert into schema_history(id, script)
+                insert into migrations (id, script)
                 select 0, 'init'
                 where not exists (
                     select 1
-                    from schema_history
+                    from migrations
                     where script = 'init'
                 );
             '''
             )
             connection.commit()
 
-    def _add_migration(self, schema):
-        logging.info(f"Adding {schema}...")
-        migration = None
-        with open(schema, 'r') as f:
-            migration = f.read()
+    def _add_migration(self, migration):
+        logging.info(f"Adding {migration}...")
+        migration_script = None
+        with open(migration, 'r') as f:
+            migration_script = f.read()
 
         with self.connect() as connection:
             cursor = connection.cursor()
-            cursor.executescript(migration)
+            cursor.executescript(migration_script)
             cursor.execute('''
-                insert into schema_history (script)
+                insert into migrations (script)
                 values (
-                    :schema
+                    :migration
                 );
-            ''', (schema,))
+            ''', (migration,))
             connection.commit()
-            logging.info(f"{schema} added successfully.")
+            logging.info(f"{migration} added successfully.")
 
     def _migrate(self):
         migrated = ()
@@ -65,15 +65,15 @@ class Database:
             cursor = connection.cursor()
             cursor.execute('''
                 select id, script, executed_at
-                from schema_history
+                from migrations
                 order by executed_at;
             ''')
             migrated = set([row['script'] for row in cursor.fetchall()])
 
-        schemas = sorted(glob.glob('app/db/schema/*.sql'))
-        for schema in schemas:
-            if schema not in migrated:
-                self._add_migration(schema)
+        migrations = sorted(glob.glob('app/db/migrations/*.sql'))
+        for migration in migrations:
+            if migration not in migrated:
+                self._add_migration(migration)
 
     @contextmanager
     def connect(self):
