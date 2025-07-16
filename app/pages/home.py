@@ -18,6 +18,18 @@ def about_card():
         )
     )
 
+def examples_card():
+    return Div(
+        Card(
+            Ul(
+                Li("Create/Read from a database"),
+                Li("Database migrations"),
+                Li("Using HTMX")
+            ),
+            header=H3("What examples are included?")
+        )
+    )
+
 def how_to_use_card():
     return Div(
         Card(
@@ -35,5 +47,6 @@ def home():
     return Container(
         head(),
         about_card(),
+        examples_card(),
         how_to_use_card()
     )
