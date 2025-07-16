@@ -36,7 +36,8 @@ def page_content(title, content):
         Title(title),
         Meta(name="viewport", content="width=device-width,initial_scale=1.0"),
         Meta(name="description", content=f"{title} - Built with FastHTML"),
-        Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+        Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"),
+        Script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js")
     )
     body = Body(
         header(title=title),
