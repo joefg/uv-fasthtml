@@ -30,7 +30,7 @@ function main(){
 	cmd=${1-default}
 	shift || true
 	case "$cmd" in
-		help)
+		default|help)
 			help "$@"
 			;;
 		restore)
