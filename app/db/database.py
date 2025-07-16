@@ -18,6 +18,7 @@ class Database:
 
     def _init_db(self):
         with self.connect() as connection:
+            connection.execute('pragma journal_mode=wal')
             cursor = connection.cursor()
             cursor.executescript('''
                 -- Create schema_history table for migrations.
@@ -80,7 +81,6 @@ class Database:
         if db_dir: os.makedirs(db_dir, exist_ok=True)
 
         connection = sqlite3.connect(self.db_path, isolation_level=None)
-        connection.execute('pragma journal_mode=wal')
         connection.row_factory = sqlite3.Row
 
         try:
