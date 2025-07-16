@@ -1,5 +1,10 @@
 from fasthtml.common import *
 
+def head():
+    return Div(
+        H2("uv + FastHTML = ❤️")
+    )
+
 def about_card():
     return Div(
         Card(
@@ -13,11 +18,22 @@ def about_card():
         )
     )
 
-def home():
-    head = Div(
-        H2("uv + FastHTML = <3")
+def how_to_use_card():
+    return Div(
+        Card(
+            Ol(
+                Li('Clone this repository;'),
+                Li('Run ', Code('./run restore;')),
+                Li('Re-initialise repository;'),
+                Li('Build your app and have fun!')
+            ),
+            header=H3("How do I use it?")
+        )
     )
+
+def home():
     return Container(
-        head,
-        about_card()
+        head(),
+        about_card(),
+        how_to_use_card()
     )
