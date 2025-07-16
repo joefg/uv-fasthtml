@@ -7,9 +7,12 @@ from models.shout import shout as shout_model
 from pages.home import home as home_page
 from pages.shout import shout as shout_page
 
+import db.database as database
 import config
 
 app, route = fast_app()
+
+db = database.db
 
 @route("/")
 def home():
