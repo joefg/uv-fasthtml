@@ -17,8 +17,7 @@ def home():
     head = Div(
         H2("uv + FastHTML = <3")
     )
-    return Div(
+    return Container(
         head,
-        about_card(),
-        cls="container"
+        about_card()
     )

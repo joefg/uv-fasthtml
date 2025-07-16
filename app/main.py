@@ -11,7 +11,6 @@ import db.database as database
 import config
 
 app = FastHTML()
-
 db = database.db
 
 @app.get("/")
@@ -41,11 +40,10 @@ def get_name(name: str):
 
 @app.get("/{path:path}")
 def not_found(path: str):
-    error = Div(
+    error = Container(
         H2("404: Page Not Found"),
         P(f"Sorry, the page '/{path}' doesn't exist."),
-        A("Go home", href="/"),
-        cls="container"
+        A("Go home", href="/")
     )
     return page(
         "404: Page Not Found",
