@@ -1,9 +1,13 @@
 from fasthtml.common import *
 
-def header(current_page="/", links=None):
+def header(current_page="/", title="uv-fasthtml", links=None):
     links_li = []
     if links: links_li = [(Li(A(link[0], href=str(link[1])))) for link in links]
     nav = Nav(
+        Ul(
+            Li(Strong(title)),
+            Li('A FastHTML template using UV')
+        ),
         Ul(
             Li(A('Home', href='/')),
             *links_li
@@ -11,11 +15,7 @@ def header(current_page="/", links=None):
     )
     return (
         Header(
-            Hgroup(
-                H1('uv-fasthtml'),
-                P('A FastHTML template using UV'),
-                nav
-            ),
+            nav,
             cls="container"
         )
     )
@@ -39,7 +39,7 @@ def page_content(title, content):
         Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
     )
     body = Body(
-        header(),
+        header(title=title),
         content,
         footer()
     )
