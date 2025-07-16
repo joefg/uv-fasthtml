@@ -10,26 +10,26 @@ from pages.shout import shout as shout_page
 import db.database as database
 import config
 
-app, route = fast_app()
+app = FastHTML()
 
 db = database.db
 
-@route("/")
+@app.get("/")
 def home():
     return page(
-        "uv-fasthtml",
+        config.APP_NAME,
         home_page()
     )
 
-@route("/shout/{name}")
+@app.get("/shout/{name}")
 def get_name(name: str):
     return page(
-        "uv-fasthtml",
+        config.APP_NAME,
         shout_page(name)
     )
 
 
-@route("/{path:path}")
+@app.get("/{path:path}")
 def not_found(path: str):
     error = Div(
         H2("404: Page Not Found"),
