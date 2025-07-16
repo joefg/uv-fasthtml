@@ -21,6 +21,16 @@ def home():
         home_page()
     )
 
+@app.get("/health")
+def get_health():
+    if not db:
+        return {
+            "database": "error"
+        }
+    return {
+        "database": "ok"
+    }
+
 @app.get("/shout/{name}")
 def get_name(name: str):
     return page(
