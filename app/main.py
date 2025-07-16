@@ -3,8 +3,11 @@ from fasthtml.common import *
 from components import page_content as page
 
 from models.shout import shout as shout_model
+import models.logbook as logbook_model
 
 from pages.home import home as home_page
+from pages.logbook import logbook as logbook_page
+from pages.logbook import log_table as logbook_table
 from pages.shout import shout as shout_page
 
 import db.database as database
@@ -37,6 +40,17 @@ def get_name(name: str):
         shout_page(name)
     )
 
+@app.get("/logbook")
+def get_logbook():
+    return page(
+        config.APP_NAME,
+        logbook_page()
+    )
+
+@app.post("/logbook/submit")
+def post_logbook(content: str):
+    logbook_model.add_log(content)
+    return logbook_table()
 
 @app.get("/{path:path}")
 def not_found(path: str):
