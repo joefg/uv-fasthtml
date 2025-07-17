@@ -5,7 +5,7 @@ def get_all_logs():
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
         sql = '''
-            select *
+            select id, content, created_at
             from logbook;
         '''
         cursor.execute(sql)
