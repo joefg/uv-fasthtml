@@ -1,6 +1,6 @@
 import db.database
 
-def get_all_logs():
+def get_all_logs() -> list[dict]:
     logs = []
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
@@ -12,7 +12,7 @@ def get_all_logs():
         logs = cursor.fetchall()
     return [dict(zip(row.keys(), row)) for row in logs]
 
-def add_log(log_text):
+def add_log(log_text) -> bool:
     if log_text:
         with db.database.db.connect() as connection:
             cursor = connection.cursor()
