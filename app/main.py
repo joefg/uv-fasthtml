@@ -1,4 +1,6 @@
-from fasthtml.common import *
+from fasthtml.common import (
+    FastHTML, Mount, Route, serve
+)
 
 from exceptions import handlers as exception_handlers
 import db.database as database

@@ -1,4 +1,6 @@
-from fasthtml.common import *
+from fasthtml.common import (
+    B, Container, Em, H3, P
+)
 
 import models.shout as shout_model
 

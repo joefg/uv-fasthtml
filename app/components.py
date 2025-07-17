@@ -1,4 +1,7 @@
-from fasthtml.common import *
+from fasthtml.common import (
+    A, Body, Footer, Head, Header, Html, Li, Link,
+    Meta, Nav, Script, Strong, Title, Ul, Small
+)
 
 def header(current_page="/", title="uv-fasthtml", links=None):
     links_li = []

@@ -1,4 +1,6 @@
-from fasthtml.common import *
+from fasthtml.common import (
+    Container, Div, H3, Fieldset, Form, Input, P, Table, Tbody, Thead, Td, Tr, Th
+)
 
 import models.logbook as logbook_model
 
