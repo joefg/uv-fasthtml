@@ -20,12 +20,10 @@ db = database.db
 
 @app.get("/health")
 def get_health():
-    if not db:
-        return {
-            "database": "error"
-        }
+    status = "error"
+    if db: status = "ok"
     return {
-        "database": "ok"
+        "database": status
     }
 
 if __name__ == "__main__":
