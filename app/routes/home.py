@@ -11,7 +11,7 @@ home_app = FastHTML(
 )
 
 @home_app.get("/")
-def home():
+async def home():
     return page(
         config.APP_NAME,
         home_page()

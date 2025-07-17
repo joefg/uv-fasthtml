@@ -13,14 +13,14 @@ shout_app = FastHTML(
 )
 
 @shout_app.get("/")
-def shout_index():
+async def shout_index():
     return page(
         config.APP_NAME,
         shout_home()
     )
 
 @shout_app.get("/{name}")
-def get_name(name: str):
+async def get_name(name: str):
     return page(
         config.APP_NAME,
         shout_page(name)

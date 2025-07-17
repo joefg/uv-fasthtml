@@ -15,14 +15,14 @@ logbook_app = FastHTML(
 )
 
 @logbook_app.get("/")
-def get_logbook():
+async def get_logbook():
     return page(
         config.APP_NAME,
         logbook_page()
     )
 
 @logbook_app.post("/submit")
-def post_logbook(content: str):
+async def post_logbook(content: str):
     log = logbook_model.Log(None, content, None)
     added = logbook_model.add_log(log)
     if added:
