@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    Br, Container, Card, Code, Div, H2, H3, Li, Ol, Ul, P
+    Br, Container, Card, Code, Div, H2, H3, Li, Ol, P, Ul
 )
 
 def head():

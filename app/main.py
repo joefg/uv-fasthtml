@@ -2,9 +2,9 @@ from fasthtml.common import (
     FastHTML, FileResponse, Mount, Route, serve
 )
 
-from exceptions import handlers as exception_handlers
-import db.database as database
 import config
+import db.database as database
+from exceptions import handlers as exception_handlers
 
 from routes.home import home_app
 from routes.logbook import logbook_app

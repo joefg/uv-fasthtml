@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    Container, Div, H3, Fieldset, Form, Input, P, Table, Tbody, Thead, Td, Tr, Th
+    Container, Div, H3, Fieldset, Form, Input, P, Table, Tbody, Thead, Td, Th, Tr
 )
 
 import models.logbook as logbook_model

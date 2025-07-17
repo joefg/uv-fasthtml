@@ -2,8 +2,8 @@ from fasthtml.common import (
     A, Container, H2, P
 )
 
-from components import page_content as page
 import config
+from components import page_content as page
 
 def _error_page(header,text):
     error = Container(
