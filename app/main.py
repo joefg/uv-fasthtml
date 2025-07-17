@@ -21,7 +21,7 @@ app = FastHTML(
 db = database.db
 
 @app.get("/health")
-def get_health():
+async def get_health():
     status = "error"
     if db: status = "ok"
     return {
