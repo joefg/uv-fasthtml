@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    FastHTML, Mount, Route, serve
+    FastHTML, FileResponse, Mount, Route, serve
 )
 
 from exceptions import handlers as exception_handlers
@@ -27,6 +27,10 @@ def get_health():
     return {
         "database": status
     }
+
+@app.get("/static/{fname:path}.{ext:static}")
+async def get(fname: str, ext: str):
+    return FileResponse(f'static/{fname}.{ext}')
 
 if __name__ == "__main__":
     serve()
