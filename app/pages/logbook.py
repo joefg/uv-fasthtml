@@ -13,7 +13,11 @@ def log_form():
     return Form(
         Fieldset(
             Label('Add entry to the logbook.'),
-            Input(name="content", placeholder="Text here")
+            Input(
+                autocomplete="off",
+                name="content",
+                placeholder="Text here"
+            )
         ),
         Input(
             type="submit",
