@@ -13,10 +13,14 @@ def get_all_logs():
     return [dict(zip(row.keys(), row)) for row in logs]
 
 def add_log(log_text):
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        sql = '''
-            insert into logbook (content)
-            values (:content)
-        '''
-        cursor.execute(sql, (log_text,))
+    if log_text:
+        with db.database.db.connect() as connection:
+            cursor = connection.cursor()
+            sql = '''
+                insert into logbook (content)
+                values (:content)
+            '''
+            cursor.execute(sql, (log_text,))
+        return True
+    else:
+        return False

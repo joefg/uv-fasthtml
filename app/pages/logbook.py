@@ -5,26 +5,32 @@ import models.logbook as logbook_model
 def header():
     return (
         Div(
-            H3("Logbook")
+            H3("Logbook"),
+            P("Add entry to the logbook.")
         )
     )
 
 def log_form():
     return Form(
         Fieldset(
-            Label('Add entry to the logbook.'),
             Input(
                 autocomplete="off",
                 name="content",
                 placeholder="Text here"
-            )
-        ),
-        Input(
-            type="submit",
-            value="Submit"
+            ),
+            Input(
+                type="submit",
+                value="Submit"
+            ),
+            role="group"
         ),
         hx_post="/logbook/submit",
         hx_target="#log-table"
+    )
+
+def log_error():
+    return (
+        P("Error")
     )
 
 def log_table():

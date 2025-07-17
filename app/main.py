@@ -8,6 +8,8 @@ import models.logbook as logbook_model
 from pages.home import home as home_page
 from pages.logbook import logbook as logbook_page
 from pages.logbook import log_table as logbook_table
+from pages.logbook import log_error as logbook_error
+
 from pages.shout import shout as shout_page
 
 import db.database as database
@@ -49,8 +51,11 @@ def get_logbook():
 
 @app.post("/logbook/submit")
 def post_logbook(content: str):
-    logbook_model.add_log(content)
-    return logbook_table()
+    added = logbook_model.add_log(content)
+    if added:
+        return logbook_table()
+    else:
+        return logbook_error()
 
 @app.get("/{path:path}")
 def not_found(path: str):
