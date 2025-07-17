@@ -13,22 +13,18 @@ def header(current_page="/", title="uv-fasthtml", links=None):
             *links_li
         )
     )
-    return (
-        Header(
-            nav,
-            cls="container"
-        )
+    return Header(
+        nav,
+        cls="container"
     )
 
 def footer():
     year = 2025
-    return (
-        Footer(
-            Small(
-                f"©{year}, all rights reserved."
-            ),
-            cls="container"
-        )
+    return Footer(
+        Small(
+            f"©{year}, all rights reserved."
+        ),
+        cls="container"
     )
 
 def page_content(title, content):

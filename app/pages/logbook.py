@@ -3,12 +3,11 @@ from fasthtml.common import *
 import models.logbook as logbook_model
 
 def header():
-    return (
-        Div(
-            H3("Logbook"),
-            P("Add entry to the logbook.")
-        )
+    return Div(
+        H3("Logbook"),
+        P("Add entry to the logbook.")
     )
+
 
 def log_form():
     return Form(
@@ -29,9 +28,7 @@ def log_form():
     )
 
 def log_error():
-    return (
-        P("Error")
-    )
+    return P("Error")
 
 def log_table():
     logs = logbook_model.get_all_logs()
