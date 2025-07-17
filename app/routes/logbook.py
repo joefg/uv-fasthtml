@@ -23,7 +23,8 @@ def get_logbook():
 
 @logbook_app.post("/submit")
 def post_logbook(content: str):
-    added = logbook_model.add_log(content)
+    log = logbook_model.Log(None, content, None)
+    added = logbook_model.add_log(log)
     if added:
         return logbook_table()
     else:

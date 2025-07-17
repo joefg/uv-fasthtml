@@ -34,9 +34,9 @@ def log_table():
     logs = logbook_model.get_all_logs()
     logs_rows = [
         Tr(
-            Td(log['id']),
-            Td(log['content']),
-            Td(log['created_at'])
+            Td(log.id),
+            Td(log.content),
+            Td(log.created_at)
         ) for log in logs
     ]
     return Table(
