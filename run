@@ -23,7 +23,7 @@ function run_serve(){
 }
 
 function run_unit(){
-	uv run pytest
+	uv run pytest tests/
 }
 
 function main(){
