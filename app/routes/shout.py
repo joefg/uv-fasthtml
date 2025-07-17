@@ -2,10 +2,15 @@ from fasthtml.common import *
 
 import config
 from components import page_content as page
+from exceptions import handlers as exception_handlers
+
 from models.shout import shout as shout_model
 from pages.shout import shout as shout_page
 
-shout_app = FastHTML(prefix="/shout")
+shout_app = FastHTML(
+    exception_handlers=exception_handlers,
+    prefix="/shout"
+)
 
 @shout_app.get("/")
 def shout_index():
@@ -18,10 +23,7 @@ def shout_index():
 
 @shout_app.get("/{name}")
 def get_name(name: str):
-    upper = shout_model(name)
     return page(
         config.APP_NAME,
-        Container(
-            P(B(Em(upper)))
-        )
+        shout_page(name)
     )

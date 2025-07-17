@@ -3,10 +3,10 @@ from fasthtml.common import *
 from components import page_content as page
 import config
 
-def not_found(request, exception):
+def _error_page(header,text):
     error = Container(
-        H2("404: Page Not Found"),
-        P(f"Sorry, the page '{request.url.path}' doesn't exist."),
+        H2(header),
+        P(text),
         A("Go home", href="/")
     )
     return page(
@@ -14,18 +14,33 @@ def not_found(request, exception):
         error
     )
 
-def internal_error(request, exception):
-    error = Container(
-        H2("500: Internal Error"),
-        P("Oops, something went wrong."),
-        A("Go Home", href="/")
+def forbidden(request, exception):
+    return _error_page(
+        "403: Forbidden",
+        "Permissions insufficient to access resource."
     )
-    return page(
-        config.APP_NAME,
-        error
+
+def internal_error(request, exception):
+    return _error_page(
+        "500: Internal Error",
+        "Oops, something went wrong."
+    )
+
+def not_found(request, exception):
+    return _error_page(
+        "404: Page Not Found",
+        f"Sorry, the page '{request.url.path}' doesn't exist."
+    )
+
+def unauthorised(request, exception):
+    return _error_page(
+        "401: Unauthorised",
+        "Sorry, you are not allowed to access this resource."
     )
 
 handlers = {
+    401: unauthorised,
+    403: forbidden,
     404: not_found,
     500: internal_error
 }

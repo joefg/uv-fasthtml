@@ -2,6 +2,7 @@ from fasthtml.common import *
 
 import config
 from components import page_content as page
+from exceptions import handlers as exception_handlers
 
 from pages.logbook import logbook as logbook_page
 from pages.logbook import log_table as logbook_table
@@ -9,7 +10,9 @@ from pages.logbook import log_error as logbook_error
 
 import models.logbook as logbook_model
 
-logbook_app = FastHTML()
+logbook_app = FastHTML(
+    exception_handlers=exception_handlers
+)
 
 @logbook_app.get("/")
 def get_logbook():
