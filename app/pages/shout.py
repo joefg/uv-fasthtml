@@ -2,6 +2,11 @@ from fasthtml.common import *
 
 import models.shout as shout_model
 
+def shout_index():
+    return Container(
+        H3("To use this, pass an argument to the endpoint.")
+    )
+
 def shout(text):
     shouted = shout_model.shout(text)
     return Container(

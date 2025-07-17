@@ -1,4 +1,4 @@
-from fasthtml.common import *
+from fasthtml.common import FastHTML
 
 import config
 from components import page_content as page
