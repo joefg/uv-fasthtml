@@ -8,8 +8,7 @@ from models.shout import shout as shout_model
 from pages.shout import shout as shout_page
 
 shout_app = FastHTML(
-    exception_handlers=exception_handlers,
-    prefix="/shout"
+    exception_handlers=exception_handlers
 )
 
 @shout_app.get("/")
