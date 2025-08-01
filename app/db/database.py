@@ -10,7 +10,6 @@ class Database:
     def __init__(self, path="database/database.sqlite3"):
         self.db_path = config.DB_PATH or path
         self._init_db()
-        self.migrate()
 
     def _init_db(self):
         with self.connect() as connection:
