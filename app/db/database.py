@@ -7,12 +7,8 @@ from contextlib import contextmanager
 import config
 
 class Database:
-    def __init__(self, path=None):
-        self.db_path = path or config.DB_PATH
-
-        if not self.db_path:
-            self.db_path = "database/database.db"
-
+    def __init__(self, path="database/database.sqlite3"):
+        self.db_path = config.DB_PATH or path
         self._init_db()
         self._migrate()
 
