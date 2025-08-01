@@ -2,6 +2,7 @@ from fasthtml.common import (
     FastHTML, FileResponse, Mount, Route, serve
 )
 
+import db.database as database
 from exceptions import handlers as exception_handlers
 
 from routes.health import health_app
@@ -20,4 +21,5 @@ app = FastHTML(
 )
 
 if __name__ == "__main__":
+    database.db.migrate()
     serve()

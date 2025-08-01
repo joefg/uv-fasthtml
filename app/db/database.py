@@ -10,7 +10,7 @@ class Database:
     def __init__(self, path="database/database.sqlite3"):
         self.db_path = config.DB_PATH or path
         self._init_db()
-        self._migrate()
+        self.migrate()
 
     def _init_db(self):
         with self.connect() as connection:
@@ -55,7 +55,7 @@ class Database:
             connection.commit()
             logging.info(f"{migration} added successfully.")
 
-    def _migrate(self):
+    def migrate(self):
         migrated = ()
         with self.connect() as connection:
             cursor = connection.cursor()
