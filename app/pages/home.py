@@ -1,5 +1,6 @@
 from fasthtml.common import (
-    Br, Container, Card, Code, Div, H2, H3, Li, Ol, P, Ul
+    Br, Container, Card, Code, Div, Details,
+    H2, H3, Li, Ol, P, Summary, Ul
 )
 
 def head():
@@ -8,40 +9,41 @@ def head():
     )
 
 def about_card():
-    return Div(
+    return Details(
+        Summary("What is this?", role="button"),
         Card(
             P('This is a template aimed at going from Zero to One in a ',
               'very short span of time. Most things should be set up for ',
               'you, so you don\'t need to worry about project structure or ',
               'testing methods.'),
-            Br(),
-            P('All you need to do is clone this repository and build!'),
-            header=H3("What is this?")
+            P('All you need to do is clone this repository and build!')
         )
     )
 
 def examples_card():
-    return Div(
+    return Details(
+        Summary("What examples are included?", role="button"),
         Card(
             Ul(
                 Li("Create/Read from a database"),
                 Li("Database migrations"),
-                Li("Using HTMX")
-            ),
-            header=H3("What examples are included?")
+                Li("Using HTMX"),
+                Li("Users and administration"),
+                Li("Automated testing and CI using GitHub Actions")
+            )
         )
     )
 
 def how_to_use_card():
-    return Div(
+    return Details(
+        Summary("How do I use it?", role="button"),
         Card(
             Ol(
                 Li('Clone this repository;'),
-                Li('Run ', Code('./run restore;')),
+                Li('Run ', Code('./run restore'), ';'),
                 Li('Re-initialise repository;'),
                 Li('Build your app and have fun!')
-            ),
-            header=H3("How do I use it?")
+            )
         )
     )
 

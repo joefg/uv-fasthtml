@@ -6,8 +6,7 @@ import models.logbook as logbook_model
 
 def header():
     return Div(
-        H3("Logbook"),
-        P("Add entry to the logbook.")
+        H3("Logbook")
     )
 
 
@@ -21,7 +20,7 @@ def log_form():
             ),
             Input(
                 type="submit",
-                value="Submit"
+                value="Add to logbook"
             ),
             role="group"
         ),
@@ -38,7 +37,8 @@ def log_table():
         Tr(
             Td(log.id),
             Td(log.content),
-            Td(log.created_at)
+            Td(log.created_at),
+            Td(log.user_email)
         ) for log in logs
     ]
     return Table(
@@ -46,7 +46,8 @@ def log_table():
             Tr(
                 Th('ID'),
                 Th('Content'),
-                Th('Date')
+                Th('Date'),
+                Th('By')
             )
         ),
         Tbody(
@@ -55,7 +56,15 @@ def log_table():
         id="log-table"
     )
 
-def logbook():
+
+def view_logbook():
+    return Container(
+        header(),
+        log_table()
+    )
+
+
+def add_logbook():
     return Container(
         header(),
         log_form(),
