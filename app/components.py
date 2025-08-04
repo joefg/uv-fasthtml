@@ -8,11 +8,10 @@ def header(current_page="/", title="uv-fasthtml", links=None):
     if links: links_li = [(Li(A(link[0], href=str(link[1])))) for link in links]
     nav = Nav(
         Ul(
-            Li(Strong(title)),
+            Li(A(Strong(title), href="/")),
             Li('A FastHTML template using UV')
         ),
         Ul(
-            Li(A('Home', href='/')),
             *links_li
         )
     )
