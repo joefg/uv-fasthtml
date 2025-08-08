@@ -1,6 +1,6 @@
 from fasthtml.common import (
     Br, Container, Card, Code, Div, Details,
-    H2, H3, Li, Ol, P, Summary, Ul
+    Grid, H2, H3, Li, Ol, P, Summary, Ul
 )
 
 def head():
@@ -50,7 +50,9 @@ def how_to_use_card():
 def home():
     return Container(
         head(),
-        about_card(),
-        examples_card(),
-        how_to_use_card()
+        Grid(
+            about_card(),
+            examples_card(),
+            how_to_use_card()
+        )
     )
