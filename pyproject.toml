@@ -14,6 +14,16 @@ pythonpath = [
     ".", "app"
 ]
 
+[tool.pyright]
+include = ["app"]
+exclude = [
+    "**/__pycache__",
+]
+defineConstant = { DEBUG = true }
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+venvPath = ".venv"
+
 [dependency-groups]
 dev = [
     "pytest>=8.4.1",
