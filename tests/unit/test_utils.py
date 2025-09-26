@@ -1,6 +1,5 @@
-from unittest.mock import patch, Mock
-
 import utils
+
 
 def test_hash_password():
     test_password = "test"
@@ -10,9 +9,10 @@ def test_hash_password():
     hashed_password = utils.hash_password(test_password, test_salt)
     assert hashed_password == known_hash
 
+
 def test_is_valid_email():
     good_email = "foo@bar.com"
-    assert utils.is_valid_email(good_email) == True
+    assert utils.is_valid_email(good_email)
 
     bad_email = "not-an-email"
-    assert utils.is_valid_email(bad_email) == False
+    assert not utils.is_valid_email(bad_email)

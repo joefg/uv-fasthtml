@@ -5,49 +5,40 @@ from fasthtml.common import (
 import config
 from components import page_content as page
 
+
 def _error_page(session, header, text):
-    error = Container(
-        H2(header),
-        P(text),
-        A("Go home", href="/")
-    )
-    return page(
-        config.APP_NAME,
-        error,
-        session=session
-    )
+    error = Container(H2(header), P(text), A("Go home", href="/"))
+    return page(config.APP_NAME, error, session=session)
+
 
 def forbidden(request, exception):
     return _error_page(
         request.session,
         "403: Forbidden",
-        "Permissions insufficient to access resource."
+        "Permissions insufficient to access resource.",
     )
+
 
 def internal_error(request, exception):
     return _error_page(
-        request.session,
-        "500: Internal Error",
-        "Oops, something went wrong."
+        request.session, "500: Internal Error", "Oops, something went wrong."
     )
+
 
 def not_found(request, exception):
     return _error_page(
         request.session,
         "404: Page Not Found",
-        f"Sorry, the page '{request.url.path}' doesn't exist."
+        f"Sorry, the page '{request.url.path}' doesn't exist.",
     )
+
 
 def unauthorised(request, exception):
     return _error_page(
         request.session,
         "401: Unauthorised",
-        "Sorry, you are not allowed to access this resource."
+        "Sorry, you are not allowed to access this resource.",
     )
 
-handlers = {
-    401: unauthorised,
-    403: forbidden,
-    404: not_found,
-    500: internal_error
-}
+
+handlers = {401: unauthorised, 403: forbidden, 404: not_found, 500: internal_error}

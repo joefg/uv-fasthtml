@@ -1,6 +1,4 @@
-from fasthtml.common import (
-    FastHTML, HTTPException
-)
+from fasthtml.common import FastHTML
 
 import auth.utils
 import config
@@ -13,24 +11,16 @@ from pages.logbook import log_table as logbook_table
 
 import models.logbook as logbook_model
 
-logbook_app = FastHTML(
-    exception_handlers=exception_handlers
-)
+logbook_app = FastHTML(exception_handlers=exception_handlers)
+
 
 @logbook_app.get("/")
 async def get_logbook(session):
     if auth.utils.is_authenticated(session):
-        return page(
-            config.APP_NAME,
-            add_logbook(),
-            session=session
-        )
+        return page(config.APP_NAME, add_logbook(), session=session)
     else:
-        return page(
-            config.APP_NAME,
-            view_logbook(),
-            session=session
-        )
+        return page(config.APP_NAME, view_logbook(), session=session)
+
 
 @logbook_app.post("/submit")
 @auth.utils.require_auth

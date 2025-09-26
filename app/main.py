@@ -1,6 +1,4 @@
-from fasthtml.common import (
-    FastHTML, Mount, Route, serve
-)
+from fasthtml.common import FastHTML, Mount, Route
 import uvicorn
 
 import config
@@ -18,16 +16,16 @@ from routes.static import static_app
 app = FastHTML(
     exception_handlers=exception_handlers,
     routes=[
-        Route('/', home_app, name="home"),
-        Mount('/admin', admin_app, name="admin"),
-        Mount('/auth', auth_app, name="auth"),
-        Mount('/health', health_app, name="health"),
-        Mount('/logbook', logbook_app, name="logbook"),
-        Mount('/protected', protected_app, name="protected"),
-        Mount('/static', static_app, name="static")
+        Route("/", home_app, name="home"),
+        Mount("/admin", admin_app, name="admin"),
+        Mount("/auth", auth_app, name="auth"),
+        Mount("/health", health_app, name="health"),
+        Mount("/logbook", logbook_app, name="logbook"),
+        Mount("/protected", protected_app, name="protected"),
+        Mount("/static", static_app, name="static"),
     ],
 )
 
 if __name__ == "__main__":
     database.db.migrate()
-    uvicorn.run("main:app", host='0.0.0.0', port=int(config.PORT), reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=int(config.PORT), reload=True)
