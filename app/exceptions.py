@@ -2,6 +2,7 @@ from fasthtml.common import (
     A, Container, H2, P
 )
 
+from alert import telegram as tg_alert
 import config
 from components import page_content as page
 
@@ -20,6 +21,13 @@ def forbidden(request, exception):
 
 
 def internal_error(request, exception):
+    import traceback
+    msg = (
+        f"Something went wrong on {config.APP_NAME}!\n" +
+        "\n" +
+        "\n".join(traceback.format_exception(exception))
+    )
+    tg_alert(msg)
     return _error_page(
         request.session, "500: Internal Error", "Oops, something went wrong."
     )
