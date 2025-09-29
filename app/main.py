@@ -28,4 +28,4 @@ app = FastHTML(
 
 if __name__ == "__main__":
     database.db.migrate()
-    uvicorn.run("main:app", host="0.0.0.0", port=int(config.PORT), reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=int(config.PORT), reload=config.DEBUG)
