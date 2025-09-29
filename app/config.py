@@ -10,7 +10,7 @@ FOOTER_TEXT = os.getenv("FOOTER_TEXT", "© uv-fasthtml, 2025 - all rights reserv
 PORT = os.getenv("PORT", 5001)
 
 # Debug settings
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+DEBUG = os.getenv("DEBUG", 'false').lower() == "true"
 
 # Datastore settings
 DB_PATH = os.getenv("DB_PATH", "database/database.sqlite3")
