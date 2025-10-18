@@ -18,10 +18,8 @@ def logout_user(session) -> None:
 
 def get_current_user(session) -> Optional[users_model.User]:
     user_id = session.get("user_id")
-    if not user_id:
-        return None
-    else:
-        return users_model.get_user_by_id(user_id)
+    if not user_id: return None
+    else: return users_model.get_user_by_id(user_id)
 
 
 def is_authenticated(session) -> bool:
@@ -29,16 +27,16 @@ def is_authenticated(session) -> bool:
 
 
 def is_active(session) -> bool:
-    if not is_authenticated(session):
-        return False
+    if not is_authenticated(session): return False
     user = users_model.get_user_by_id(session["user_id"])
+    if not user: return False
     return bool(user.is_active)
 
 
 def is_admin(session) -> bool:
-    if not is_authenticated(session):
-        return False
+    if not is_authenticated(session): return False
     user = users_model.get_user_by_id(session["user_id"])
+    if not user: return False
     return bool(user.is_admin)
 
 
