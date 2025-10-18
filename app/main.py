@@ -5,7 +5,6 @@ import uvicorn
 
 from alert import telegram as tg_alert
 import config
-import db.database as database
 from exceptions import handlers as exception_handlers
 
 from routes.admin import admin_app
@@ -31,7 +30,6 @@ app = FastHTML(
 
 if __name__ == "__main__":
     try:
-        database.db.migrate()
         uvicorn.run("main:app", host="0.0.0.0", port=int(config.PORT), reload=config.DEBUG)
     except Exception as ex:
         logging.exception(f"Something went wrong on {config.APP_NAME}!")
