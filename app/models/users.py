@@ -1,22 +1,22 @@
 from dataclasses import dataclass
 from datetime import datetime
-from secrets import token_hex
 from typing import Optional
 
 import db.database
-from utils import hash_password
 
 
 @dataclass
 class User:
     id: int
-    email: str
-    password_hash: str
-    password_salt: str
     is_active: bool
     is_admin: bool
-    creation_date: Optional[datetime] = None
-    last_login: Optional[datetime] = None
+    gh_login: str
+    gh_node_id: str
+    gh_avatar_url: str
+    gh_type: str
+    gh_created_at: datetime
+    creation_date: datetime
+    last_login: datetime
 
 
 def get_all_users() -> list[User]:
@@ -27,11 +27,13 @@ def get_all_users() -> list[User]:
         sql = """
             select
                 id,
-                email,
-                password_hash,
-                password_salt,
                 is_active,
                 is_admin,
+                gh_login,
+                gh_node_id,
+                gh_avatar_url,
+                gh_type,
+                gh_created_at,
                 creation_date,
                 last_login
             from users;
@@ -41,43 +43,21 @@ def get_all_users() -> list[User]:
     return logs
 
 
-def get_user(email: str) -> User:
-    user = None
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
-        sql = """
-            select
-                id,
-                email,
-                password_hash,
-                password_salt,
-                is_active,
-                is_admin,
-                creation_date,
-                last_login
-            from users
-            where users.email = :user_email
-            limit 1;
-        """
-        cursor.execute(sql, {"user_email": email})
-        user = cursor.fetchone()
-    return user
-
-
 def get_user_by_id(id: int) -> User:
     user = None
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             select
                 id,
-                email,
-                password_hash,
-                password_salt,
                 is_active,
                 is_admin,
+                gh_login,
+                gh_node_id,
+                gh_avatar_url,
+                gh_type,
+                gh_created_at,
                 creation_date,
                 last_login
             from users
@@ -89,56 +69,110 @@ def get_user_by_id(id: int) -> User:
     return user
 
 
-def register_user(email: str, password: str) -> None:
-    password_salt = token_hex(16)
-    password_hash = hash_password(password, password_salt)
+def register_user(gh_user_info: dict) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
-            insert into users (email, password_hash, password_salt, is_active)
-            values (
+            insert into users (
+                id,
+                email,
+                is_active,
+                is_admin,
+                gh_login,
+                gh_node_id,
+                gh_avatar_url,
+                gh_type,
+                gh_created_at
+            ) values (
+                :id,
                 :email,
-                :password_hash,
-                :password_salt,
-                :is_active
+                :is_active,
+                :is_admin,
+                :gh_login,
+                :gh_node_id,
+                :gh_avatar_url,
+                :gh_type,
+                :gh_created_at
             );
         """
         params = {
-            "email": email,
-            "password_hash": password_hash,
-            "password_salt": password_salt,
+            "id": gh_user_info['id'],
+            "email": (gh_user_info['email'] or "None provided"),
             "is_active": True,
+            "is_admin": False,
+            "gh_login": gh_user_info['login'],
+            "gh_node_id": gh_user_info['node_id'],
+            "gh_avatar_url": gh_user_info['avatar_url'],
+            "gh_type": gh_user_info['type'],
+            "gh_created_at": gh_user_info['created_at']
         }
         cursor.execute(sql, params)
         connection.commit()
 
 
-def authenticate_user(email: str, password: str) -> Optional[User]:
+def update_user(gh_user_info: dict) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
-            select id, email, password_hash, password_salt, is_active, is_admin
-            from users
-            where users.email = :email;
+            update users
+            set
+                id = :id,
+                email = :email,
+                is_active = :is_active,
+                gh_login = :gh_login,
+                gh_node_id = :gh_node_id,
+                gh_avatar_url = :gh_avatar_url,
+                gh_type = :gh_type,
+                gh_created_at = :gh_created_at
+            where id = :id;
         """
-        params = {"email": email}
+        params = {
+            "id": gh_user_info['id'],
+            "email": (gh_user_info['email'] or "None provided"),
+            "is_active": True,
+            "gh_login": gh_user_info['login'],
+            "gh_node_id": gh_user_info['node_id'],
+            "gh_avatar_url": gh_user_info['avatar_url'],
+            "gh_type": gh_user_info['type'],
+            "gh_created_at": gh_user_info['created_at']
+        }
+        cursor.execute(sql, params)
+        connection.commit()
+
+
+def delete_user(id: int) -> None:
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        cursor.row_factory = lambda _, row: User(*row)
+        sql = """
+            delete from users
+            where users.id = :id;
+        """
+        params = {"id": id}
+        cursor.execute(sql, params)
+
+
+def authenticate_user(id: int) -> Optional[User]:
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        sql = """
+            select id, is_active
+            from users
+            where users.id = :id;
+        """
+        params = {"id": id}
         cursor.execute(sql, params)
         user = cursor.fetchone()
-        if not user:
-            return None
-        if not user.is_active:
-            raise ValueError("Account deactivated, please contact support.")
-        if user.password_hash == hash_password(password, user.password_salt):
-            return user
-    return None
+        if not user: return None
+        else: return user
 
 
 def update_last_login(user_id: int) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             update users
             set last_login = current_timestamp

@@ -25,3 +25,7 @@ DISCORD_WEBHOOK_TOKEN = os.getenv("DISCORD_WEBHOOK_TOKEN")
 
 # Slack alert settings
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+
+# GitHub OAuth
+GH_OAUTH_ID = os.getenv("GH_OAUTH_ID")
+GH_OAUTH_SECRET = os.getenv("GH_OAUTH_SECRET")

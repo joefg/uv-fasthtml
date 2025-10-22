@@ -5,7 +5,7 @@ from fasthtml.common import (
     Title, Ul,
 )
 
-from auth.utils import is_authenticated, is_admin
+from auth.utils import get_current_user, is_authenticated, is_admin
 import config
 
 
@@ -23,9 +23,9 @@ def header(current_page="/", title=None, links=None):
     return Header(nav, cls="container")
 
 
-def user_dropdown(user_email, links=None):
+def user_dropdown(user_name, links=None):
     return Details(
-        Summary(user_email),
+        Summary(user_name),
         Ul(
             *[Li(link) for link in links] if links else [],
             Li(A("Logout", href="/auth/logout")),
@@ -43,33 +43,19 @@ def footer(links=None):
     return Footer(nav, cls="container")
 
 
-def login_form(btn_text, target, confirm=False):
-    return Form(
-        Input(id="email", type="email", placeholder="Email", required=True),
-        Input(id="password", type="password", placeholder="Password", required=True),
-        Input(
-            id="confirm_password",
-            type="password",
-            placeholder="Confirm Password",
-            required=True,
-        )
-        if confirm
-        else None,
-        Button(btn_text, type="submit"),
-        Span(id="error", style="color:red"),
-        hx_post=target,
-        hx_target="#error",
-    )
+def login_with(label_text, target):
+    return A(label_text, href=target)
 
 
 def page_content(title, content, links=None, session=None):
     links_li = links or []
-
     drop_links = []
+
     if is_admin(session):
         drop_links = [A("Admin", href="/admin")]
     if is_authenticated(session):
-        links_li.append(user_dropdown(session.get("email"), links=drop_links))
+        user = get_current_user(session)
+        if user: links_li.append(user_dropdown(user.gh_login, links=drop_links))
     else:
         links_li.append(A("Login", href="/auth/login"))
 

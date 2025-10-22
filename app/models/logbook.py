@@ -8,7 +8,7 @@ class Log:
     id: int
     content: str
     created_at: str
-    user_email: int
+    gh_login: str
 
 
 def get_all_logs() -> list[Log]:
@@ -21,7 +21,7 @@ def get_all_logs() -> list[Log]:
                 logbook.id,
                 logbook.content,
                 logbook.created_at,
-                users.email as "user_email"
+                users.gh_login
             from logbook
             left join users on (
                 logbook.created_by = users.id

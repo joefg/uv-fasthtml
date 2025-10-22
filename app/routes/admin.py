@@ -21,8 +21,7 @@ async def get_admin(session):
 @require_admin
 async def get_user(session, id: int):
     user = users_model.get_user_by_id(id)
-    if not user:
-        raise HTTPException(status_code=404)
+    if not user: raise HTTPException(status_code=404)
     hide_operations = session["user_id"] == id
     return page(config.APP_NAME, user_page(user, hide_operations), session=session)
 
@@ -31,12 +30,9 @@ async def get_user(session, id: int):
 @require_admin
 async def grant_admin(session, id: int):
     user = users_model.get_user_by_id(id)
-    if not user:
-        raise HTTPException(status_code=404)
-    if user.is_admin == 1:
-        raise HTTPException(status_code=409)
-    if session["user_id"] == id:
-        raise HTTPException(status_code=400)
+    if not user: raise HTTPException(status_code=404)
+    if bool(user.is_admin): raise HTTPException(status_code=409)
+    if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_admin(user.id, True)
         ret = users_model.get_user_by_id(user.id)
@@ -47,12 +43,9 @@ async def grant_admin(session, id: int):
 @require_admin
 async def revoke_admin(session, id: int):
     user = users_model.get_user_by_id(id)
-    if not user:
-        raise HTTPException(status_code=404)
-    if user.is_admin == 0:
-        raise HTTPException(status_code=409)
-    if session["user_id"] == id:
-        raise HTTPException(status_code=400)
+    if not user: raise HTTPException(status_code=404)
+    if not bool(user.is_admin): raise HTTPException(status_code=409)
+    if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_admin(user.id, False)
         ret = users_model.get_user_by_id(user.id)
@@ -63,12 +56,9 @@ async def revoke_admin(session, id: int):
 @require_admin
 async def activate_user(session, id: int):
     user = users_model.get_user_by_id(id)
-    if not user:
-        raise HTTPException(status_code=404)
-    if user.is_active == 1:
-        raise HTTPException(status_code=409)
-    if session["user_id"] == id:
-        raise HTTPException(status_code=400)
+    if not user: raise HTTPException(status_code=404)
+    if bool(user.is_active): raise HTTPException(status_code=409)
+    if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_active(user.id, True)
         ret = users_model.get_user_by_id(user.id)
@@ -79,12 +69,9 @@ async def activate_user(session, id: int):
 @require_admin
 async def deactivate_user(session, id: int):
     user = users_model.get_user_by_id(id)
-    if not user:
-        raise HTTPException(status_code=404)
-    if user.is_active == 0:
-        raise HTTPException(status_code=409)
-    if session["user_id"] == id:
-        raise HTTPException(status_code=400)
+    if not user: raise HTTPException(status_code=404)
+    if not bool(user.is_active): raise HTTPException(status_code=409)
+    if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_active(user.id, False)
         ret = users_model.get_user_by_id(user.id)

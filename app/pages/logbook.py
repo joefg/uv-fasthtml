@@ -30,7 +30,7 @@ def log_error():
 def log_table():
     logs = logbook_model.get_all_logs()
     logs_rows = [
-        Tr(Td(log.id), Td(log.content), Td(log.created_at), Td(log.user_email))
+        Tr(Td(log.id), Td(log.content), Td(log.created_at), Td(log.gh_login))
         for log in logs
     ]
     return Table(
