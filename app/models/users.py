@@ -186,7 +186,7 @@ def update_last_login(user_id: int) -> None:
 def set_user_admin(user_id: int, change_to: bool) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             update users
             set is_admin = :change_to
@@ -200,7 +200,7 @@ def set_user_admin(user_id: int, change_to: bool) -> None:
 def set_user_active(user_id: int, change_to: bool) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             update users
             set is_active = :change_to
