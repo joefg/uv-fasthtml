@@ -1,6 +1,5 @@
 from fasthtml.common import (
-    A, Card, Container, Div, H2, Hr,
-    P
+    Card, Container, H2, P
 )
 
 from components import login_with

@@ -1,7 +1,6 @@
 from fasthtml.common import (
-    A, Body, Button, Details, Footer, Form,
-    Head, Header, Html, Input, Li, Link, Meta,
-    Nav, Script, Small, Span, Summary, Strong,
+    A, Body, Details, Footer, Head, Header, Html, Li, Link, Meta,
+    Nav, Script, Small, Summary, Strong,
     Title, Ul,
 )
 
