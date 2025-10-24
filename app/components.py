@@ -69,7 +69,7 @@ def page_content(title, content, links=None, session=None):
         ),
         Link(
             rel="stylesheet",
-            href="./static/styles.css"
+            href="/static/styles.css"
         ),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"),
     )
