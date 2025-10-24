@@ -19,7 +19,7 @@ def users_table():
     users_rows = [
         Tr(
             Td(user.id),
-            Td(user.email),
+            Td(user.gh_login),
             Td("Yes" if user.is_active else "No"),
             Td(A("More details", href="/admin/user/" + str(user.id), role="button")),
         )
@@ -29,7 +29,7 @@ def users_table():
         Thead(
             Tr(
                 Th("ID"),
-                Th("Email"),
+                Th("GitHub login"),
                 Th("Active?"),
             )
         ),
@@ -38,12 +38,12 @@ def users_table():
     )
 
 
-def user_blurb(user_email):
+def user_blurb(gh_login):
     return Nav(
         Ul(
             Li(A("Administration", href="/admin/")),
             Li(A("Users", href="/admin#users-table")),
-            Li(user_email),
+            Li(gh_login),
         ),
         aria_label="breadcrumb",
     )
@@ -53,7 +53,7 @@ def user_card(user, hide_operations=False):
     is_active = bool(user.is_active)
     is_admin = bool(user.is_admin)
     details = (
-        H3(user.email),
+        H3(user.gh_login),
         Table(
             Tr(Td("ID"), Td(str(user.id))),
             Tr(Td("Creation date"), Td(user.creation_date)),
@@ -92,4 +92,4 @@ def admin_page():
 
 
 def user_page(user, hide_operations=False):
-    return Container(user_blurb(user.email), user_card(user, hide_operations))
+    return Container(user_blurb(user.gh_login), user_card(user, hide_operations))

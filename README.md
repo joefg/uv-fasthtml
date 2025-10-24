@@ -16,13 +16,15 @@ When deploying to production, disable autoreload and hide it behind
 a [reverse
 proxy](https://www.digitalocean.com/community/tutorials/how-to-configure-nginx-as-a-reverse-proxy-on-ubuntu-22-04).
 
+To get a GitHub OAuth token and secret, follow [this
+guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app).
+
 ## TODO
 
 - [x] Database
 - [x] External JavaScript
 - [x] Testing
-- [ ] Login
-- [ ] OAuth Authentication
+- [x] OAuth Authentication
 - [ ] Streaming content
 
 ## Why?

@@ -6,14 +6,12 @@ from fasthtml.common import HTTPException
 import models.users as users_model
 
 
-def login_user(session, user: users_model.User) -> None:
-    session["user_id"] = user.id
-    session["email"] = user.email
+def login_user(session, user_id) -> None:
+    session["user_id"] = user_id
 
 
 def logout_user(session) -> None:
     session.pop("user_id", None)
-    session.pop("email", None)
 
 
 def get_current_user(session) -> Optional[users_model.User]:

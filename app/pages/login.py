@@ -1,21 +1,27 @@
 from fasthtml.common import (
-    A, Card, Container, Div, H2, Hr,
-    P
+    Card, Container, H2, P
 )
 
-from components import login_form
+from components import login_with
 
 
 def head():
-    return Div(H2("Log In"))
+    return H2("Log In")
 
 
-def login():
+def login(login_text: str, login_link: str):
     return Container(
         Card(
             head(),
-            login_form("Log in", "/auth/login"),
-            Hr(),
-            P("Don't have an account? ", A("Sign up", href="/auth/register"), "."),
+            login_with(login_text, login_link)
+        )
+    )
+
+
+def account_deactivated():
+    return Container(
+        Card(
+            H2("Account deactivated"),
+            P("Please contact support.")
         )
     )
