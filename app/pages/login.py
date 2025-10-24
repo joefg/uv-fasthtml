@@ -11,7 +11,10 @@ def login(login_forms=[]):
     return Container(
         Card(
             head(),
-            *login_forms
+            P(
+                *login_forms,
+                cls="grid"
+            )
         )
     )
 
