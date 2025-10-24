@@ -1,7 +1,9 @@
 from functools import wraps
 from typing import Optional
 
-from fasthtml.common import HTTPException
+from fasthtml.common import (
+    Beforeware, HTTPException, RedirectResponse
+)
 
 import models.users as users_model
 
@@ -58,3 +60,11 @@ def require_admin(func):
         return await func(session, *args, **kwargs)
 
     return wrapper
+
+
+def before(request, session):
+    auth = request.scope['auth'] = session.get('user_id', None)
+    if not auth: return RedirectResponse("/auth/login", status_code=303)
+
+
+beforeware = Beforeware(before, skip=['/auth/login', '/auth/oauth-redirect'])

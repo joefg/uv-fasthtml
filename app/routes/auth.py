@@ -2,7 +2,7 @@ from fasthtml.common import FastHTML, RedirectResponse
 from fasthtml.oauth import redir_url
 
 import auth.utils
-import auth.github as gh
+import auth.github as github
 
 import config
 from components import page_content as page
@@ -19,12 +19,12 @@ auth_app = FastHTML(exception_handlers=exception_handlers)
 
 @auth_app.get("/login")
 async def login(request, session):
-    redirect = redir_url(request, gh.auth_callback)
-    login_link = gh.client.login_link(redirect)
-    login_text = "Sign in with GitHub"
+    login_forms = [
+        github.auth.login_button(request),
+    ]
     return page(
         config.APP_NAME,
-        login_page(login_text, login_link),
+        login_page(login_forms),
         links=None,
         session=session
     )
@@ -33,8 +33,8 @@ async def login(request, session):
 @auth_app.get("/oauth-redirect")
 async def oauth_redirect(code: str, request, session):
     redirect = redir_url(request, "/auth/oauth-redirect")
-    user_info = gh.client.retr_info(code, redirect)
-    user_id = user_info[gh.client.id_key]
+    user_info = github.auth.client.retr_info(code, redirect)
+    user_id = user_info[github.auth.client.id_key]
 
     user = get_user_by_id(user_id)
     if not user:
