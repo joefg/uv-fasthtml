@@ -9,7 +9,9 @@ class TestProtected:
         assert request.status_code == 404
 
     def test_authenticated_protected_returns_200(self):
-        cookies = {"session_name" : "session_value"}
-        client = TestClient(app, cookies=cookies)
+        client = TestClient(app)
+        # log in using integration_test
+
+        # then get this resource
         request = client.get("/protected/.gitkeep")
         assert request.status_code == 200
