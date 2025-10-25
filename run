@@ -3,16 +3,16 @@
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-TESTS=('unit' 'integration')
+TESTS=('unit' 'integration' 'all')
 function help(){
 cat << EOF
 uv-fasthtml
 
-help                        : Display help text
-restore                     : Fetch dependencies
-serve                       : Spawn a server
-lint                        : Run linter
-test <unit|integration|all> : Run tests, defaults to all
+help                          : Display help text
+restore                       : Fetch dependencies
+serve                         : Spawn a server
+lint                          : Run linter
+test <|$(printf "%s|" "${TESTS[@]}")> : Run tests, defaults to all
 EOF
 }
 
