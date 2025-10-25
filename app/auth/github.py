@@ -14,19 +14,21 @@ class TestGitHubAppClient(_AppClient):
     def __init__(self, code=None, scope=None, **kwargs):
         super().__init__('dummy-id', 'dummy-secret', code=code, scope=scope, **kwargs)
 
-if config.GH_OAUTH_ID and config.GH_OAUTH_SECRET:
-    if config.TESTING:
-        client = TestGitHubAppClient()
-    else:
+if config.TESTING:
+    client = TestGitHubAppClient()
+else:
+    if config.GH_OAUTH_ID and config.GH_OAUTH_SECRET:
         client = GitHubAppClient(
             client_id=config.GH_OAUTH_ID,
             client_secret=config.GH_OAUTH_SECRET
         )
+    else:
+        raise Exception("GitHub OAuth not set up.")
 
-    auth_callback = "/auth/oauth-redirect"
+auth_callback = "/auth/oauth-redirect"
 
-    def before(request, session):
-        auth = request.scope['auth'] = session.get('user_id', None)
-        if not auth: return RedirectResponse("/auth/login", status_code=303)
+def before(request, session):
+    auth = request.scope['auth'] = session.get('user_id', None)
+    if not auth: return RedirectResponse("/auth/login", status_code=303)
 
-    beforeware = Beforeware(before, skip=['/auth/login', '/auth/oauth-redirect'])
+beforeware = Beforeware(before, skip=['/auth/login', '/auth/oauth-redirect'])
