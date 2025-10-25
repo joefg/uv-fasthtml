@@ -16,5 +16,3 @@ if config.GH_OAUTH_ID and config.GH_OAUTH_SECRET:
         if not auth: return RedirectResponse("/auth/login", status_code=303)
 
     beforeware = Beforeware(before, skip=['/auth/login', '/auth/oauth-redirect'])
-else:
-    raise Exception("GitHub OAuth not configured.")
