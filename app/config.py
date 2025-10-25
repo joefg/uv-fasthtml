@@ -11,6 +11,7 @@ PORT = os.getenv("PORT", 5001)
 
 # Debug settings
 DEBUG = os.getenv("DEBUG", 'false').lower() == "true"
+TESTING = os.getenv("TESTING", 'false').lower() == "true"
 
 # Datastore settings
 DB_PATH = os.getenv("DB_PATH", "database/database.sqlite3")
