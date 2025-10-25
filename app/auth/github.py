@@ -1,13 +1,27 @@
 from fasthtml.common import RedirectResponse
-from fasthtml.oauth import Beforeware, GitHubAppClient
+from fasthtml.oauth import Beforeware, GitHubAppClient, _AppClient
 
 import config
 
+class TestGitHubAppClient(_AppClient):
+    "A `WebApplicationClient` for GitHub oauth2"
+    prefix = "https://oauth-mock.mock.beeceptor.com"
+    base_url = f"{prefix}/oauth/authorize"
+    token_url = f"{prefix}/oauth/token/github"
+    info_url = f"{prefix}/userinfo/github"
+    id_key = 'id'
+
+    def __init__(self, code=None, scope=None, **kwargs):
+        super().__init__('dummy-id', 'dummy-secret', code=code, scope=scope, **kwargs)
+
 if config.GH_OAUTH_ID and config.GH_OAUTH_SECRET:
-    client = GitHubAppClient(
-        client_id=config.GH_OAUTH_ID,
-        client_secret=config.GH_OAUTH_SECRET
-    )
+    if config.TESTING:
+        client = TestGitHubAppClient()
+    else:
+        client = GitHubAppClient(
+            client_id=config.GH_OAUTH_ID,
+            client_secret=config.GH_OAUTH_SECRET
+        )
 
     auth_callback = "/auth/oauth-redirect"
 
