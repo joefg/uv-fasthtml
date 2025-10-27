@@ -39,6 +39,7 @@ async def oauth_redirect(code: str, request, session):
     user = get_user_by_id(user_id)
     if not user:
         register_user(user_info)
+        auth.utils.login_user(session, user_id)
     else:
         if not bool(user.is_active):
             return page(
@@ -52,7 +53,7 @@ async def oauth_redirect(code: str, request, session):
             auth.utils.login_user(session, user_id)
             update_user(user_info)
             update_last_login(user_id)
-            return RedirectResponse("/", status_code=303)
+    return RedirectResponse("/", status_code=303)
 
 
 @auth_app.get("/logout")

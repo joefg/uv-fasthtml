@@ -8,6 +8,7 @@ from utils import mock_auth, set_test_user_admin
 @pytest.fixture(autouse=True)
 def setup():
     set_test_user_admin(True)
+    yield
 
 def test_unauthenticated_users_cant_see_admin():
     client = TestClient(app)
