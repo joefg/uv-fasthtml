@@ -2,18 +2,19 @@ from fasthtml.common import (
     Card, Container, H2, P
 )
 
-from components import login_with
-
 
 def head():
     return H2("Log In")
 
 
-def login(login_text: str, login_link: str):
+def login(login_forms=[]):
     return Container(
         Card(
             head(),
-            login_with(login_text, login_link)
+            P(
+                *login_forms,
+                cls="grid"
+            )
         )
     )
 
