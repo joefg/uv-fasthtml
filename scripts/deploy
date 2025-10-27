@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function help(){
+cat << EOF
+prod-deploy
+
+help           : Display help text
+deploy <tag>   : Deploy tag
+rollback <tag> : Roll back to tag
+EOF
+}
+
+function run_deploy(){
+	cd "$THISDIR/.."
+	CURRENT_TAG=$(git tag --points-at HEAD)
+	CURRENT_TAG="${CURRENT_TAG:-no_tag}"
+
+	# Stop the service
+	./run stop
+
+	# Take backup of data store
+	mkdir -p database/backups
+	cp database/database.sqlite3 \
+		"database/backups/$CURRENT_TAG.database.sqlite3"
+
+	# Checkout the tag
+	git fetch -p
+	git checkout "$1"
+
+	# Restore environment and serve
+	./run restore
+	./run serve
+}
+
+function run_rollback(){
+	cd "$THISDIR/.."
+
+	# Stop the service
+	./run stop
+
+	# Restore backup of data store
+	mv "database/backups/$1.database.sqlite3" \
+		"database/database.sqlite3"
+
+	# Checkout the tag
+	git fetch -p
+	git checkout "$1"
+
+	# Restore environment and serve
+	./run restore
+	./run serve
+}
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help "$@"
+			;;
+		deploy)
+			run_deploy "$@"
+			;;
+		rollback)
+			run_rollback "$0"
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"
