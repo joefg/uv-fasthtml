@@ -2,6 +2,7 @@
 
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+test -f "$THISDIR/.env" && source "$THISDIR/.env"
 
 function help(){
 cat << EOF
@@ -28,10 +29,11 @@ function run_serve(){
 }
 
 function run_stop(){
+	port=${PORT:-5001}
 	# By default the application runs on port 5001.
 	# This command finds applications running on port 5001 and
 	# kills them.
-	lsof -i :5001 | awk '{print $2}' | tail -n +2 | xargs kill
+	lsof -i ":$port" | awk '{print $2}' | tail -n +2 | xargs kill
 }
 
 function run_lint(){

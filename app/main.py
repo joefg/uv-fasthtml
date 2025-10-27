@@ -30,7 +30,7 @@ app = FastHTML(
 
 if __name__ == "__main__":
     try:
-        uvicorn.run("main:app", host="0.0.0.0", port=5001, reload=config.DEBUG)
+        uvicorn.run("main:app", host="0.0.0.0", port=int(config.PORT), reload=config.DEBUG)
     except Exception as ex:
         logging.exception(f"Something went wrong on {config.APP_NAME}!")
         import traceback
