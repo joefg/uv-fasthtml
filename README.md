@@ -10,11 +10,13 @@ one of a project.
 A Runfile is provided for your convience. See all commands with `./run`.
 
 `./run restore` fetches all dependencies, and `./run serve` spawns a
-server.
+server. To stop the server, run `./run stop`.
 
 When deploying to production, disable autoreload and hide it behind
-a [reverse
-proxy](https://www.digitalocean.com/community/tutorials/how-to-configure-nginx-as-a-reverse-proxy-on-ubuntu-22-04).
+a reverse proxy.
+
+For this, I recommend using [Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy).
+An example `Caddyfile` is provided for your convenience.
 
 To get a GitHub OAuth token and secret, follow [this
 guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app).
