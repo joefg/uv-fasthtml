@@ -19,7 +19,6 @@ EOF
 function run_restore(){
 	uv sync
 	(test -f "$THISDIR/database/database.sqlite3" || uv run fastmigrate_create_db)
-	sqlite3 "$THISDIR/database/database.sqlite3" "PRAGMA journal_mode=WAL;"
 	uv run fastmigrate_run_migrations
 }
 
