@@ -2,6 +2,7 @@
 
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+test -f "$THISDIR/.env" && source "$THISDIR/.env"
 
 function help(){
 cat << EOF
@@ -9,6 +10,7 @@ uv-fasthtml
 
 restore                     : Fetch dependencies
 serve                       : Spawn a server
+stop                        : Kill server
 lint                        : Run linter
 test <unit|integration|all> : Run tests, defaults to all
 EOF
@@ -17,13 +19,20 @@ EOF
 function run_restore(){
 	uv sync
 	(test -f "$THISDIR/database/database.sqlite3" || uv run fastmigrate_create_db)
-	sqlite3 "$THISDIR/database/database.sqlite3" "PRAGMA journal_mode=WAL;"
 	uv run fastmigrate_run_migrations
 }
 
 function run_serve(){
 	uv run fastmigrate_run_migrations
-	uv run app/main.py
+	uv run app/main.py &
+}
+
+function run_stop(){
+	port=${PORT:-5001}
+	# By default the application runs on port 5001.
+	# This command finds applications running on port 5001 and
+	# kills them.
+	lsof -i ":$port" | awk '{print $2}' | tail -n +2 | xargs kill
 }
 
 function run_lint(){
@@ -66,6 +75,9 @@ function main(){
 			;;
 		serve)
 			run_serve
+			;;
+		stop)
+			run_stop
 			;;
 		lint)
 			run_lint
