@@ -11,6 +11,7 @@ uv-fasthtml
 restore                     : Fetch dependencies
 serve                       : Spawn a server
 stop                        : Kill server
+debug                       : Run the server without backgrounding
 lint                        : Run linter
 test <unit|integration|all> : Run tests, defaults to all
 EOF
@@ -33,6 +34,11 @@ function run_stop(){
 	# This command finds applications running on port 5001 and
 	# kills them.
 	lsof -i ":$port" | awk '{print $2}' | tail -n +2 | xargs kill
+}
+
+function run_debug(){
+	uv run fastmigrate_run_migrations
+	uv run app/main.py
 }
 
 function run_lint(){
@@ -78,6 +84,9 @@ function main(){
 			;;
 		stop)
 			run_stop
+			;;
+		debug)
+			run_debug
 			;;
 		lint)
 			run_lint
