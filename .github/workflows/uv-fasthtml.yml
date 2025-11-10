@@ -36,3 +36,15 @@ jobs:
 
       - name: "Run integration tests"
         run: ./run test integration
+
+      - name: "Install Playwright browsers"
+        run: uv run playwright install
+
+      - name: "Run server"
+        run: TESTING=true ./run serve
+
+      - name: "Run e2e tests"
+        run: ./run test e2e
+
+      - name: "Kill server"
+        run: ./run stop

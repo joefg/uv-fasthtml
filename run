@@ -8,12 +8,12 @@ function help(){
 cat << EOF
 uv-fasthtml
 
-restore                     : Fetch dependencies
-serve                       : Spawn a server
-stop                        : Kill server
-debug                       : Run the server without backgrounding
-lint                        : Run linter
-test <unit|integration|all> : Run tests, defaults to all
+restore                         : Fetch dependencies
+serve                           : Spawn a server
+stop                            : Kill server
+debug                           : Run the server without backgrounding
+lint                            : Run linter
+test <unit|integration|e2e|all> : Run tests, defaults to all
 EOF
 }
 
@@ -53,18 +53,27 @@ function run_integration(){
 	TESTING=true uv run pytest tests/integration
 }
 
+function run_e2e(){
+	uv run playwright install 
+	TESTING=true uv run pytest tests/e2e
+}
+
 function run_test(){
   scope=${1-all}
 	case "$scope" in
 		all)
 			run_unit
 			run_integration
+			run_e2e
 			;;
 		unit)
 			run_unit
 			;;
 		integration)
 			run_integration
+			;;
+		e2e)
+			run_e2e
 			;;
 		esac
 }
