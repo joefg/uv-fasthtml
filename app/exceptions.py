@@ -1,6 +1,7 @@
 from fasthtml.common import (
     A, Container, H2, P
 )
+from starlette.background import BackgroundTasks
 
 from alert import telegram as tg_alert
 import config
@@ -21,16 +22,18 @@ def forbidden(request, exception):
 
 
 def internal_error(request, exception):
+    tasks = BackgroundTasks()
     import traceback
     msg = (
         f"Something went wrong on {config.APP_NAME}!\n" +
-        "\n" +
-        "\n".join(traceback.format_exception(exception))
+        "\n```" +
+        "\n".join(traceback.format_exception(exception)) +
+        "```"
     )
-    tg_alert(msg)
+    tasks.add_task(tg_alert, msg=msg)
     return _error_page(
         request.session, "500: Internal Error", "Oops, something went wrong."
-    )
+    ), tasks
 
 
 def not_found(request, exception):
