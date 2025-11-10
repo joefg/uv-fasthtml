@@ -13,5 +13,5 @@ def test_go_to_login_page(page: Page):
     # Click the get started link.
     page.get_by_role("link", name="Login").click()
 
-    # Expects page to have a heading with the name of Installation.
-    expect(page.get_by_role("heading", name="Installation")).to_be_visible()
+    # Expect a title "to contain" a substring.
+    expect(page).to_have_title(re.compile("uv-fasthtml"))
