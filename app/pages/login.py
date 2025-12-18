@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    Card, Container, H2, P
+    Div, H2, P
 )
 
 

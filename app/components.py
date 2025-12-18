@@ -13,23 +13,35 @@ def header(current_page="/", title=None, links=None):
     if links:
         links_li = [Li(link) for link in links]
     nav = Nav(
-        Ul(
-            Li(A(Strong(title or config.APP_NAME), href="/")),
-            Li("A FastHTML template using UV"),
+        Div(
+            A(Strong(title or config.APP_NAME), href="/", cls="navbar-item"),
+            A("A FastHTML template using UV", href="#", cls="navbar-item"),
+            cls="navbar-start",
         ),
-        Ul(*links_li),
+        Div(*links_li, cls="navbar-end"),
+        cls="navbar is-light",
+        role="navigation",
+        aria_label="main navigation",
     )
     return Header(nav, cls="container")
 
 
 def user_dropdown(user_name, links=None):
-    return Details(
-        Summary(user_name),
-        Ul(
-            *[Li(link) for link in links] if links else [],
-            Li(A("Logout", href="/auth/logout")),
+    dropdown_links = []
+    if links:
+        dropdown_links = [Li(link) for link in links]
+    dropdown_links.append(Li(A("Logout", href="/auth/logout")))
+    
+    return Div(
+        Div(
+            A(user_name, cls="navbar-link"),
+            cls="navbar-item has-dropdown is-hoverable",
         ),
-        cls="dropdown",
+        Div(
+            Div(*dropdown_links, cls="navbar-dropdown"),
+            cls="navbar-dropdown",
+        ),
+        cls="navbar-item has-dropdown is-hoverable",
     )
 
 
@@ -37,13 +49,22 @@ def footer(links=None):
     footer_text = config.FOOTER_TEXT or "uv-fasthtml"
     links_li = []
     if links:
-        links_li = [Li(link) for link in links]
-    nav = Nav(Small(f"{footer_text}"), *links_li)
+        links_li = [Div(link, cls="navbar-item") for link in links]
+    nav = Nav(
+        Div(
+            Small(f"{footer_text}"),
+            *links_li,
+            cls="navbar-start",
+        ),
+        cls="navbar is-light",
+        role="navigation",
+        aria_label="footer navigation",
+    )
     return Footer(nav, cls="container")
 
 
 def login_with(label_text, target):
-    return A(label_text, href=target)
+    return A(label_text, href=target, cls="button is-primary")
 
 
 def page_content(title, content, links=None, session=None):
@@ -64,7 +85,7 @@ def page_content(title, content, links=None, session=None):
         Meta(name="description", content=f"{title} - Built with FastHTML"),
         Link(
             rel="stylesheet",
-            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css",
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css",
         ),
         Link(
             rel="stylesheet",
@@ -72,5 +93,12 @@ def page_content(title, content, links=None, session=None):
         ),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"),
     )
-    body = Body(header(title=title, links=links_li), content, footer())
+    body = Body(
+        Div(
+            header(title=title, links=links_li),
+            Div(content, cls="section"),
+            footer(),
+            cls="container",
+        )
+    )
     return Html(head, body)
