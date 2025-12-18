@@ -92,6 +92,7 @@ def page_content(title, content, links=None, session=None):
             href="/static/styles.css"
         ),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"),
+        Script(src="https://cdn.jsdelivr.net/npm/bulma@0.9.4/js/bulma.min.js"),
     )
     body = Body(
         Div(
