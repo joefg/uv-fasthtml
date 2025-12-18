@@ -1,9 +1,2 @@
-/* This is a bug in pico.css, which appears when using
- * Firefox. https://github.com/picocss/pico/issues/701 */
-nav details.dropdown {
-		display: inline-block;
-}
-
-/* Login buttons */
-.github-button {
-}
+/* Bulma CSS custom overrides */
+/* Add any custom styling that overrides Bulma defaults here */

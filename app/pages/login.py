@@ -8,21 +8,31 @@ def head():
 
 
 def login(login_forms=[]):
-    return Container(
-        Card(
+    return Div(
+        Div(
             head(),
+            cls="card-header-title",
+        ),
+        Div(
             P(
                 *login_forms,
-                cls="grid"
-            )
-        )
+                cls="buttons"
+            ),
+            cls="card-content",
+        ),
+        cls="card",
     )
 
 
 def account_deactivated():
-    return Container(
-        Card(
+    return Div(
+        Div(
             H2("Account deactivated"),
-            P("Please contact support.")
-        )
+            cls="card-header-title",
+        ),
+        Div(
+            P("Please contact support."),
+            cls="card-content",
+        ),
+        cls="card",
     )
