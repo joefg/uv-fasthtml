@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    A, Container, H2, P
+    A, Div, H2, P
 )
 from starlette.background import BackgroundTasks
 
@@ -9,7 +9,18 @@ from components import page_content as page
 
 
 def _error_page(session, header, text):
-    error = Container(H2(header), P(text), A("Go home", href="/"))
+    error = Div(
+        Div(
+            H2(header, cls="title is-3"),
+            cls="card-header-title",
+        ),
+        Div(
+            P(text),
+            A("Go home", href="/", cls="button is-primary mt-3"),
+            cls="card-content",
+        ),
+        cls="card",
+    )
     return page(config.APP_NAME, error, session=session)
 
 
