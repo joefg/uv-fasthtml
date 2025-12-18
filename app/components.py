@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    A, Body, Details, Footer, Head, Header, Html, Li, Link, Meta,
+    A, Body, Details, Div, Footer, Head, Header, Html, Li, Link, Meta,
     Nav, Script, Small, Summary, Strong,
     Title, Ul,
 )
