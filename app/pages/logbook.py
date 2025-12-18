@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    Container, Div, H3, Fieldset, Form, Input,
+    Div, H3, Fieldset, Form, Input,
     P, Table, Tbody, Thead, Td, Th,
     Tr
 )
@@ -14,8 +14,11 @@ def header():
 def log_form():
     return Form(
         Fieldset(
-            Input(autocomplete="off", name="content", placeholder="Text here"),
-            Input(type="submit", value="Add to logbook"),
+            Div(
+                Input(autocomplete="off", name="content", placeholder="Text here", cls="input"),
+                Input(type="submit", value="Add to logbook", cls="button is-primary"),
+                cls="field has-addons",
+            ),
             role="group",
         ),
         hx_post="/logbook/submit",
@@ -36,13 +39,23 @@ def log_table():
     return Table(
         Thead(Tr(Th("ID"), Th("Content"), Th("Date"), Th("By"))),
         Tbody(*logs_rows),
+        cls="table is-fullwidth is-striped",
         id="log-table",
     )
 
 
 def view_logbook():
-    return Container(header(), log_table())
+    return Div(
+        header(),
+        log_table(),
+        cls="container",
+    )
 
 
 def add_logbook():
-    return Container(header(), log_form(), log_table())
+    return Div(
+        header(),
+        log_form(),
+        log_table(),
+        cls="container",
+    )
