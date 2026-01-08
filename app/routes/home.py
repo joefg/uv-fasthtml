@@ -1,13 +1,10 @@
-from fasthtml.common import FastHTML
-
 import config
 from components import page_content as page
-from exceptions import handlers as exception_handlers
 
+from routes.base import RouteApp
 from pages.home import home as home_page
 
-home_app = FastHTML(exception_handlers=exception_handlers)
-
+home_app = RouteApp()
 
 @home_app.get("/")
 async def home(session):

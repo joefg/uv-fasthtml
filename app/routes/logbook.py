@@ -1,9 +1,6 @@
-from fasthtml.common import FastHTML
-
 import auth.utils
 import config
 from components import page_content as page
-from exceptions import handlers as exception_handlers
 
 from pages.logbook import log_error as logbook_error
 from pages.logbook import add_logbook, view_logbook
@@ -11,7 +8,9 @@ from pages.logbook import log_table as logbook_table
 
 import models.logbook as logbook_model
 
-logbook_app = FastHTML(exception_handlers=exception_handlers)
+from routes.base import RouteApp
+
+logbook_app = RouteApp()
 
 
 @logbook_app.get("/")

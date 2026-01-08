@@ -1,8 +1,8 @@
-from fasthtml.common import FastHTML, FileResponse
+from fasthtml.common import FileResponse
 
-from exceptions import handlers as exception_handlers
+from routes.base import RouteApp
 
-static_app = FastHTML(exception_handlers=exception_handlers)
+static_app = RouteApp()
 
 
 @static_app.get("/{fname:path}.{ext:static}")

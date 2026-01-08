@@ -1,15 +1,14 @@
-from fasthtml.common import FastHTML, HTTPException
+from fasthtml.common import HTTPException
 
 from auth.utils import require_admin
 import config
 from components import page_content as page
-from exceptions import handlers as exception_handlers
 
+from routes.base import RouteApp
 import models.users as users_model
 from pages.admin import admin_page, user_page, user_card
 
-admin_app = FastHTML(exception_handlers=exception_handlers)
-
+admin_app = RouteApp()
 
 @admin_app.get("/")
 @require_admin
