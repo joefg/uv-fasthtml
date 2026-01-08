@@ -1,9 +1,9 @@
-from fasthtml.common import FastHTML, FileResponse
+from fasthtml.common import FileResponse
 
 from auth.utils import require_auth
-from exceptions import handlers as exception_handlers
+from routes.base import RouteApp
 
-protected_app = FastHTML(exception_handlers=exception_handlers)
+protected_app = RouteApp()
 
 
 @protected_app.get("/{fname:path}.{ext:static}")
