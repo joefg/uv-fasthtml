@@ -7,7 +7,14 @@ requires-python = ">=3.13"
 dependencies = [
     "fastmigrate>=0.4.0",
     "python-dotenv>=1.1.1",
-    "python-fasthtml>=0.12.21",
+    "python-fasthtml>=0.12.21"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-playwright>=0.7.1",
+		"ruff>=0.13.2",
     "ty>=0.0.10",
 ]
 
@@ -16,26 +23,19 @@ pythonpath = [
     ".", "app"
 ]
 
-[tool.pyright]
+[tool.ty.environment]
+root = ["./app"]
+
+[tool.ty.src]
 include = ["app"]
 exclude = [
     "**/__pycache__",
+    "tests/"
 ]
-defineConstant = { DEBUG = true }
-reportMissingImports = "error"
-reportMissingTypeStubs = false
-venvPath = ".venv"
 
 [tool.ruff.lint]
 ignore = [
     "E701",
     "F403", # Star imports
     "F405"  # Star imports
-]
-
-[dependency-groups]
-dev = [
-    "pytest>=8.4.1",
-    "pytest-playwright>=0.7.1",
-    "ruff>=0.13.2",
 ]

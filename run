@@ -12,7 +12,7 @@ restore                         : Fetch dependencies
 serve                           : Spawn a server
 stop                            : Kill server
 dev                             : Run the server without backgrounding
-lint                            : Run linter
+lint                            : Run linter and type checker
 test <unit|integration|e2e|all> : Run tests, defaults to all
 EOF
 }
@@ -43,6 +43,7 @@ function run_dev(){
 
 function run_lint(){
 	uv run ruff check
+	uv run ty check
 }
 
 function run_unit(){
