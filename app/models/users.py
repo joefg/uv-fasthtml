@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from functools import lru_cache
 from typing import Optional
 
 import db.database
@@ -28,7 +27,6 @@ class UserNote:
     created_at: datetime
 
 
-@lru_cache(32)
 def search_users(query: str) -> list[User]:
     users = []
     with db.database.db.connect() as connection:
