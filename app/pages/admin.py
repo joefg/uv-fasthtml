@@ -92,12 +92,13 @@ def user_card(user, user_notes, hide_operations=False):
 
     add_note = Form(
         Fieldset(
-            Input(autocomplete="off", name="note", placeholder="Text here"),
+            Input(id="add-note-input", autocomplete="off", name="note", placeholder="Text here"),
             Input(type="submit", value="Add note"),
             role="group",
         ),
         hx_post=f"/admin/user/{user.id}/add-note",
         hx_target="#user-notes",
+        hx_on__after_request="document.getElementById('add-note-input').value=''"
     )
 
     notes = Div(

@@ -48,9 +48,11 @@ async def get_user_notes(session, id: int):
 @admin_app.post("/user/{id}/add-note")
 @require_admin
 async def add_note(session, id: int, note: str):
+    existing_notes = users_model.get_user_notes(id)
+    if note == "": return notes_list(existing_notes)
     users_model.add_user_note(id, session["user_id"], note)
-    notes = users_model.get_user_notes(id)
-    return notes_list(notes)
+    updated_notes = users_model.get_user_notes(id)
+    return notes_list(updated_notes)
 
 
 @admin_app.post("/user/{id}/grant-admin")
