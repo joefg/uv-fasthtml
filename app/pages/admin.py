@@ -7,6 +7,16 @@ def users_blurb():
         aria_label="breadcrumb",
     )
 
+def search_box():
+    return Div(
+        H3("Search"),
+        Input(
+            hx_post="/admin/users", hx_target="#users-table",
+            hx_trigger="input changed delay:500ms, search",
+            type="search", name="query",
+            placeholder="Start typing GitHub username to search users..."
+        )
+    )
 
 def users_table(users):
     users_rows = [
@@ -31,6 +41,9 @@ def users_table(users):
     )
 
 
+def admin_page():
+    return Container(users_blurb(), search_box(), users_table(None))
+
 def user_blurb(gh_login):
     return Nav(
         Ul(
@@ -42,9 +55,25 @@ def user_blurb(gh_login):
     )
 
 
-def user_card(user, hide_operations=False):
+def account_note(note):
+    note_card = Div(
+        H4(note.created_at),
+        P(note.note)
+    )
+    return note_card
+
+def notes_list(notes):
+    if not notes: return Div(id="user-notes")
+    return Div(
+        *[account_note(note) for note in notes],
+        id="user-notes"
+    )
+
+
+def user_card(user, user_notes, hide_operations=False):
     is_active = bool(user.is_active)
     is_admin = bool(user.is_admin)
+
     details = (
         H3(user.gh_login),
         Table(
@@ -55,16 +84,32 @@ def user_card(user, hide_operations=False):
             Tr(Td("Admin"), Td("Yes" if is_admin else "No")),
         ),
     )
+
+    add_note = Form(
+        Fieldset(
+            Input(autocomplete="off", name="note", placeholder="Text here"),
+            Input(type="submit", value="Add note"),
+            role="group",
+        ),
+        hx_post=f"/admin/user/{user.id}/add-note",
+        hx_target="#user-notes",
+    )
+
+    notes = Div(
+        H3("User notes"),
+        add_note(),
+        notes_list(user_notes)
+    )
+
     operations = (
         H3("Options"),
-        P(Em("Each operation is logged.")),
         Div(
             Button(
                 "Deactivate user" if is_active else "Activate user",
                 hx_post=f"/admin/user/{user.id}/"
                 + ("deactivate" if is_active else "activate"),
                 hx_swap="outerHTML",
-                hx_target="#user-card",
+                hx_target="#user-details",
             ),
             Button(
                 "Revoke admin" if is_admin else "Grant admin",
@@ -72,27 +117,17 @@ def user_card(user, hide_operations=False):
                 + ("revoke" if is_admin else "grant")
                 + "-admin",
                 hx_swap="outerHTML",
-                hx_target="#user-card",
+                hx_target="#user-details",
             ),
             cls="grid",
         ),
     )
-    return Card(details, None if hide_operations else operations, id="user-card")
-
-def search_box():
-    return Div(
-        H3("Search"),
-        Input(
-            hx_post="/admin/users", hx_target="#users-table",
-            hx_trigger="input changed delay:500ms, search",
-            type="search", name="query",
-            placeholder="Start typing GitHub username to search users..."
-        )
+    return Card(
+        Div(details, None if hide_operations else operations, id="user-details"),
+        Hr(),
+        notes()
     )
 
-def admin_page():
-    return Container(users_blurb(), search_box(), users_table(None))
 
-
-def user_page(user, hide_operations=False):
-    return Container(user_blurb(user.gh_login), user_card(user, hide_operations))
+def user_page(user, notes, hide_operations=False):
+    return Container(user_blurb(user.gh_login), user_card(user, notes, hide_operations))

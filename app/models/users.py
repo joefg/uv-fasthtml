@@ -19,6 +19,14 @@ class User:
     creation_date: datetime
     last_login: datetime
 
+@dataclass
+class UserNote:
+    id: int
+    user_id: int
+    note_added_by: int
+    note: str
+    created_at: datetime
+
 
 @lru_cache(32)
 def search_users(query: str) -> list[User]:
@@ -211,5 +219,47 @@ def set_user_active(user_id: int, change_to: bool) -> None:
             where users.id = :user_id;
         """
         params = {"user_id": user_id, "change_to": change_to}
+        cursor.execute(sql, params)
+        connection.commit()
+
+def get_user_notes(user_id: int) -> list[UserNote]:
+    notes = []
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        cursor.row_factory = lambda _, row: UserNote(*row)
+        sql = """
+            select
+                id,
+                user_id,
+                added_by_id,
+                note,
+                creation_date
+            from user_note
+            where user_id = :user_id
+            order by creation_date desc;
+        """
+        cursor.execute(sql, {"user_id": user_id})
+        notes = cursor.fetchall()
+    return notes
+
+def add_user_note(user_id: int, added_by_id: int, note: str) -> None:
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        sql = """
+            insert into user_note (
+                user_id,
+                note,
+                added_by_id
+            ) values (
+                :user_id,
+                :note,
+                :added_by_id
+            );
+        """
+        params = {
+            "user_id": user_id,
+            "note": note,
+            "added_by_id": added_by_id
+        }
         cursor.execute(sql, params)
         connection.commit()
