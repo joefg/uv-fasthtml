@@ -18,12 +18,20 @@ class User:
     creation_date: datetime
     last_login: datetime
 
+@dataclass
+class UserNote:
+    id: int
+    user_id: int
+    note_added_by: int
+    note: str
+    created_at: datetime
 
-def get_all_users() -> list[User]:
-    logs = []
+
+def search_users(query: str) -> list[User]:
+    users = []
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             select
                 id,
@@ -36,11 +44,13 @@ def get_all_users() -> list[User]:
                 gh_created_at,
                 creation_date,
                 last_login
-            from users;
+            from users
+            where gh_login like '%' || :query || '%'
+            limit 15;
         """
-        cursor.execute(sql)
-        logs = cursor.fetchall()
-    return logs
+        cursor.execute(sql, {'query': query})
+        users = cursor.fetchall()
+    return users
 
 
 def get_user_by_id(id: int) -> User:
@@ -207,5 +217,47 @@ def set_user_active(user_id: int, change_to: bool) -> None:
             where users.id = :user_id;
         """
         params = {"user_id": user_id, "change_to": change_to}
+        cursor.execute(sql, params)
+        connection.commit()
+
+def get_user_notes(user_id: int) -> list[UserNote]:
+    notes = []
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        cursor.row_factory = lambda _, row: UserNote(*row)
+        sql = """
+            select
+                id,
+                user_id,
+                added_by_id,
+                note,
+                creation_date
+            from user_notes
+            where user_id = :user_id
+            order by creation_date desc;
+        """
+        cursor.execute(sql, {"user_id": user_id})
+        notes = cursor.fetchall()
+    return notes
+
+def add_user_note(user_id: int, added_by_id: int, note: str) -> None:
+    with db.database.db.connect() as connection:
+        cursor = connection.cursor()
+        sql = """
+            insert into user_notes (
+                user_id,
+                note,
+                added_by_id
+            ) values (
+                :user_id,
+                :note,
+                :added_by_id
+            );
+        """
+        params = {
+            "user_id": user_id,
+            "note": note,
+            "added_by_id": added_by_id
+        }
         cursor.execute(sql, params)
         connection.commit()

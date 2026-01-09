@@ -1,3 +1,8 @@
+:root {
+		max-width: 900px;
+		margin: 0 auto;
+}
+
 /* This is a bug in pico.css, which appears when using
  * Firefox. https://github.com/picocss/pico/issues/701 */
 nav details.dropdown {
