@@ -8,9 +8,9 @@ from pages.logbook import log_table as logbook_table
 
 import models.logbook as logbook_model
 
-from routes.base import RouteApp
+from routes.base import route_app
 
-logbook_app = RouteApp()
+logbook_app = route_app()
 
 
 @logbook_app.get("/")

@@ -1,8 +1,8 @@
 from fasthtml.common import FileResponse
 
-from routes.base import RouteApp
+from routes.base import route_app
 
-static_app = RouteApp()
+static_app = route_app()
 
 
 @static_app.get("/{fname:path}.{ext:static}")
