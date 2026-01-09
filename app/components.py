@@ -1,8 +1,4 @@
-from fasthtml.common import (
-    A, Body, Details, Footer, Head, Header, Html, Li, Link, Meta,
-    Nav, Script, Small, Summary, Strong,
-    Title, Ul,
-)
+from fasthtml.common import *
 
 from auth.utils import get_current_user, is_authenticated, is_admin
 import config

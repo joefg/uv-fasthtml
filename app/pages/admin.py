@@ -19,6 +19,7 @@ def search_box():
     )
 
 def users_table(users):
+    if not users: return Div(id="users-table")
     users_rows = [
         Tr(
             Td(user.id),
@@ -27,7 +28,7 @@ def users_table(users):
             Td(A("More details", href="/admin/user/" + str(user.id), role="button")),
         )
         for user in users
-    ] if users else []
+    ]
     return Table(
         Thead(
             Tr(
@@ -42,7 +43,11 @@ def users_table(users):
 
 
 def admin_page():
-    return Container(users_blurb(), search_box(), users_table(None))
+    return Container(
+        users_blurb(),
+        search_box(),
+        users_table(None),
+    )
 
 def user_blurb(gh_login):
     return Nav(
