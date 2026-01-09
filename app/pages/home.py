@@ -1,5 +1,5 @@
 from fasthtml.common import (
-    Container, Card, Code, Div, Details, Grid,
+    Container, Card, Code, Div, Details,
     H2, Li, Ol, P, Summary, Ul,
 )
 
@@ -53,4 +53,4 @@ def how_to_use_card():
 
 
 def home():
-    return Container(head(), Grid(about_card(), examples_card(), how_to_use_card()))
+    return Container(head(), about_card(), examples_card(), how_to_use_card())
