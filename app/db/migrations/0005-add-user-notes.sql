@@ -5,7 +5,7 @@
 -- store.
 --
 
-create table if not exists user_note (
+create table if not exists user_notes (
 		id integer not null primary key,
 		user_id integer not null,
 		added_by_id integer not null,
@@ -15,14 +15,14 @@ create table if not exists user_note (
 		foreign key (added_by_id) references users(id)
 );
 
-insert into user_note (
+insert into user_notes (
 		id,
 		user_id,
 		added_by_id,
 		note
 ) values (
 		1,
-		1001,
-		1002,
+		1,
+		1,
 		"Test note."
 );

@@ -232,7 +232,7 @@ def get_user_notes(user_id: int) -> list[UserNote]:
                 added_by_id,
                 note,
                 creation_date
-            from user_note
+            from user_notes
             where user_id = :user_id
             order by creation_date desc;
         """
@@ -244,7 +244,7 @@ def add_user_note(user_id: int, added_by_id: int, note: str) -> None:
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
         sql = """
-            insert into user_note (
+            insert into user_notes (
                 user_id,
                 note,
                 added_by_id
