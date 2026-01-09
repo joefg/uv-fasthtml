@@ -28,6 +28,19 @@ def test_authenticated_admins_returns_ok():
     request = authenticated_client.get("/admin")
     assert request.status_code == 200
 
+def test_authenticated_admins_can_search():
+    client = TestClient(app)
+    authenticated_client = mock_auth(client)
+    request = authenticated_client.post("/admin/users", data={'query': 'foo'})
+    assert request.status_code == 200
+
+def test_authenticated_non_admins_cant_search():
+    client = TestClient(app)
+    authenticated_client = mock_auth(client)
+    set_test_user_admin(False)
+    request = authenticated_client.post("/admin/users", data={'query': 'foo'})
+    assert request.status_code == 401
+
 def test_authenticated_admins_can_see_user():
     client = TestClient(app)
     authenticated_client = mock_auth(client)

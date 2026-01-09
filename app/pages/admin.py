@@ -1,10 +1,4 @@
-from fasthtml.common import (
-    A, Button, Card, Container, Div, Em,
-    H3, Nav, Ul, Li, P, Table,
-    Th, Td, Tr, Thead, Tbody,
-)
-
-import models.users as users_model
+from fasthtml.common import *
 
 
 def users_blurb():
@@ -14,8 +8,7 @@ def users_blurb():
     )
 
 
-def users_table():
-    users = users_model.get_all_users()
+def users_table(users):
     users_rows = [
         Tr(
             Td(user.id),
@@ -24,7 +17,7 @@ def users_table():
             Td(A("More details", href="/admin/user/" + str(user.id), role="button")),
         )
         for user in users
-    ]
+    ] if users else []
     return Table(
         Thead(
             Tr(
@@ -86,9 +79,19 @@ def user_card(user, hide_operations=False):
     )
     return Card(details, None if hide_operations else operations, id="user-card")
 
+def search_box():
+    return Div(
+        H3("Search"),
+        Input(
+            hx_post="/admin/users", hx_target="#users-table",
+            hx_trigger="input changed delay:500ms, search",
+            type="search", name="query",
+            placeholder="Start typing GitHub username to search users..."
+        )
+    )
 
 def admin_page():
-    return Container(users_blurb(), users_table())
+    return Container(users_blurb(), search_box(), users_table(None))
 
 
 def user_page(user, hide_operations=False):

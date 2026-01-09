@@ -6,7 +6,9 @@ from components import page_content as page
 
 from routes.base import RouteApp
 import models.users as users_model
-from pages.admin import admin_page, user_page, user_card
+from pages.admin import (
+    admin_page, user_page, user_card, users_table
+)
 
 admin_app = RouteApp()
 
@@ -14,6 +16,15 @@ admin_app = RouteApp()
 @require_admin
 async def get_admin(session):
     return page(config.APP_NAME, admin_page(), session=session)
+
+
+@admin_app.post("/users")
+@require_admin
+async def search(session, query: str):
+    results = users_model.search_users(query)
+    if not results: return "No user found"
+    if len(query) >= 5: return users_table(results)
+    else: return users_table(None)
 
 
 @admin_app.get("/user/{id}")

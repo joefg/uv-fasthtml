@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from functools import lru_cache
 from typing import Optional
 
 import db.database
@@ -19,11 +20,12 @@ class User:
     last_login: datetime
 
 
-def get_all_users() -> list[User]:
-    logs = []
+@lru_cache(32)
+def search_users(query: str) -> list[User]:
+    users = []
     with db.database.db.connect() as connection:
         cursor = connection.cursor()
-        cursor.row_factory = lambda cursor, row: User(*row)
+        cursor.row_factory = lambda _, row: User(*row)
         sql = """
             select
                 id,
@@ -36,11 +38,13 @@ def get_all_users() -> list[User]:
                 gh_created_at,
                 creation_date,
                 last_login
-            from users;
+            from users
+            where gh_login like '%' || :query || '%'
+            limit 15;
         """
-        cursor.execute(sql)
-        logs = cursor.fetchall()
-    return logs
+        cursor.execute(sql, {'query': query})
+        users = cursor.fetchall()
+    return users
 
 
 def get_user_by_id(id: int) -> User:
