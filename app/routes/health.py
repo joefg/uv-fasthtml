@@ -1,7 +1,7 @@
 import db.database as database
-from routes.base import RouteApp
+from routes.base import route_app
 
-health_app = RouteApp()
+health_app = route_app()
 
 @health_app.get("/")
 async def get_health():
