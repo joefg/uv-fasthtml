@@ -26,7 +26,11 @@ reportMissingTypeStubs = false
 venvPath = ".venv"
 
 [tool.ruff.lint]
-ignore = ["E701"]
+ignore = [
+		"E701",
+		"F403", # Star imports
+		"F405"  # Star imports
+]
 
 [dependency-groups]
 dev = [
