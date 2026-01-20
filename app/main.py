@@ -11,7 +11,6 @@ from routes.admin import admin_app
 from routes.auth import auth_app
 from routes.health import health_app
 from routes.home import home_app
-from routes.logbook import logbook_app
 from routes.protected import protected_app
 from routes.static import static_app
 
@@ -22,7 +21,6 @@ app = FastHTML(
         Mount("/admin", admin_app, name="admin"),
         Mount("/auth", auth_app, name="auth"),
         Mount("/health", health_app, name="health"),
-        Mount("/logbook", logbook_app, name="logbook"),
         Mount("/protected", protected_app, name="protected"),
         Mount("/static", static_app, name="static"),
     ],
