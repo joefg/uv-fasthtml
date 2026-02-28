@@ -1,4 +1,4 @@
-from fasthtml.common import RedirectResponse
+from fasthtml.common import APIRouter, RedirectResponse
 from fasthtml.oauth import redir_url
 
 from starlette.background import BackgroundTasks
@@ -10,7 +10,6 @@ from alert import telegram
 import config
 from components import page_content as page
 
-from routes.base import RouteApp
 from models.users import (
     authenticate_user, get_user_by_id, register_user,
     update_last_login, update_user
@@ -18,7 +17,7 @@ from models.users import (
 from pages.login import login as login_page
 from pages.login import account_deactivated as account_deactivated_page
 
-auth_app = RouteApp()
+auth_app = APIRouter("/auth")
 
 def alert_new_signup(username: str):
     alert_message = f"""

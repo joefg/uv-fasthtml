@@ -1,7 +1,8 @@
-import db.database as database
-from routes.base import RouteApp
+from fasthtml import APIRouter
 
-health_app = RouteApp()
+import db.database as database
+
+health_app = APIRouter(prefix="/health")
 
 @health_app.get("/")
 async def get_health():

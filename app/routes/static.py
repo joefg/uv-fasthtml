@@ -1,8 +1,7 @@
-from fasthtml.common import FileResponse
+from fasthtml.common import APIRouter, FileResponse
 
-from routes.base import RouteApp
 
-static_app = RouteApp()
+static_app = APIRouter(prefix="/static")
 
 
 @static_app.get("/{fname:path}.{ext:static}")
