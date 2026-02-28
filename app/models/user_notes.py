@@ -1,19 +1,10 @@
-from datetime import datetime
 
 from sqlmodel import (
-    Field, Session, SQLModel,
-    select, create_engine
+    select
 )
 
-from db.database import connect
-
-
-class UserNote(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    user_id: int
-    note_added_by: int
-    note: str
-    created_at: datetime | None = Field(default=datetime.now())
+from .models import UserNote
+from database import connect
 
 
 def get_user_notes(user_id: int) -> list[UserNote]:

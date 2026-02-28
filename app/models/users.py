@@ -1,24 +1,11 @@
 from datetime import datetime
 
 from sqlmodel import (
-    Field, Session, SQLModel,
-    select, create_engine
+    select
 )
 
-from db.database import connect
-
-
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    is_active: bool
-    is_admin: bool
-    gh_login: str
-    gh_node_id: str
-    gh_avatar_url: str
-    gh_type: str
-    gh_created_at: datetime
-    creation_date: datetime | None = Field(default=datetime.now())
-    last_login: datetime | None = Field(default=datetime.now())
+from .models import User
+from database import connect
 
 
 def search_users(query: str) -> list[User]:

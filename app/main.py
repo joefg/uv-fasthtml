@@ -6,7 +6,6 @@ import uvicorn
 from alert import telegram as tg_alert
 from beforeware import rate_limiter
 import config
-from db import database
 from exceptions import handlers as exception_handlers
 
 from routes.admin import admin_app
@@ -15,8 +14,6 @@ from routes.health import health_app
 from routes.home import home_app
 from routes.protected import protected_app
 from routes.static import static_app
-
-from models import users
 
 app = FastHTML(
     before=rate_limiter,
@@ -29,10 +26,6 @@ static_app.to_app(app)
 auth_app.to_app(app)
 protected_app.to_app(app)
 admin_app.to_app(app)
-
-@app.on_event("startup")
-def on_start():
-    database.init_db()
 
 if __name__ == "__main__":
     try:
