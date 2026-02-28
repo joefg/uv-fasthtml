@@ -1,9 +1,10 @@
 import logging
 
-from fasthtml.common import FastHTML, Mount, Route
+from fasthtml.common import FastHTML
 import uvicorn
 
 from alert import telegram as tg_alert
+from beforeware import rate_limiter
 import config
 from exceptions import handlers as exception_handlers
 
@@ -15,16 +16,16 @@ from routes.protected import protected_app
 from routes.static import static_app
 
 app = FastHTML(
-    exception_handlers=exception_handlers,
-    routes=[
-        Route("/", home_app, name="home"),
-        Mount("/admin", admin_app, name="admin"),
-        Mount("/auth", auth_app, name="auth"),
-        Mount("/health", health_app, name="health"),
-        Mount("/protected", protected_app, name="protected"),
-        Mount("/static", static_app, name="static"),
-    ],
+    before=rate_limiter,
+    exception_handlers=exception_handlers
 )
+
+home_app.to_app(app)
+health_app.to_app(app)
+static_app.to_app(app)
+auth_app.to_app(app)
+protected_app.to_app(app)
+admin_app.to_app(app)
 
 if __name__ == "__main__":
     try:

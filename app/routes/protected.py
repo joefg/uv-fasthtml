@@ -1,9 +1,8 @@
-from fasthtml.common import FileResponse
+from fasthtml.common import APIRouter, FileResponse
 
 from auth.utils import require_auth
-from routes.base import RouteApp
 
-protected_app = RouteApp()
+protected_app = APIRouter(prefix="/protected")
 
 
 @protected_app.get("/{fname:path}.{ext:static}")

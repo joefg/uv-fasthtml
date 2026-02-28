@@ -1,16 +1,15 @@
-from fasthtml.common import HTTPException
+from fasthtml.common import APIRouter, HTTPException
 
 from auth.utils import require_admin
 import config
 from components import page_content as page
 
-from routes.base import RouteApp
 import models.users as users_model
 from pages.admin import (
     admin_page, user_page, user_card, users_table, notes_list
 )
 
-admin_app = RouteApp()
+admin_app = APIRouter("/admin")
 
 @admin_app.get("/")
 @require_admin
