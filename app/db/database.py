@@ -4,24 +4,14 @@ from contextlib import contextmanager
 
 import config
 
+from sqlmodel import create_engine, SQLModel, Session
 
-class Database:
-    def __init__(self, path="database/database.sqlite3"):
-        self.db_path = config.DB_PATH or path
+engine = create_engine(("sqlite:///" + config.DB_PATH) or "sqlite://database/database.sqlite3")
 
-    @contextmanager
-    def connect(self):
-        db_dir = os.path.dirname(self.db_path)
-        if db_dir:
-            os.makedirs(db_dir, exist_ok=True)
+def init_db():
+    SQLModel.metadata.create_all(engine)
 
-        connection = sqlite3.connect(self.db_path, isolation_level=None)
-        connection.row_factory = sqlite3.Row
-
-        try:
-            yield connection
-        finally:
-            connection.close()
-
-
-db = Database()
+@contextmanager
+def connect():
+    with Session(engine) as session:
+        yield session
