@@ -19,6 +19,6 @@ class User(SQLModel, table=True):
 class UserNote(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     user_id: int
-    note_added_by: int
+    note_added_by: int = Field(default=None, foreign_key="user.id")
     note: str
     created_at: datetime | None = Field(default=datetime.now())
