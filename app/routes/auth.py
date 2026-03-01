@@ -20,11 +20,12 @@ from pages.login import account_deactivated as account_deactivated_page
 auth_app = APIRouter("/auth")
 
 def alert_new_signup(username: str):
-    alert_message = f"""
-✨ A new user has registered! ✨
+    alert_message = (
+        "✨ A new user has registered! ✨\n"
+        "\n" +
+        f"{username} has signed up!"
+    )
 
-{username} has signed up!
-"""
     telegram(msg=alert_message)
 
 
