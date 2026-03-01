@@ -1,7 +1,7 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config, pool, MetaData
-from sqlmodel import SQLModel
+from sqlalchemy import engine_from_config, pool
+from sqlmodel import SQLModel, MetaData
 
 from alembic import context
 
@@ -20,7 +20,7 @@ naming_convention = {
     "pk": "pk_%(table_name)s"
 }
 
-target_metadata = MetaData(naming_convention=naming_convention)
+target_metadata = SQLModel.metadata
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
