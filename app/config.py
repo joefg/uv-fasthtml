@@ -13,9 +13,6 @@ PORT = os.getenv("PORT", 5001)
 DEBUG = os.getenv("DEBUG", 'false').lower() == "true"
 TESTING = os.getenv("TESTING", 'false').lower() == "true"
 
-# Datastore settings
-DB_PATH = os.getenv("DB_PATH", "database/database.sqlite3")
-
 # Telegram alert settings
 TG_TOKEN = os.getenv("TG_TOKEN")
 TG_ALERT_CHAT = os.getenv("TG_ALERT_CHAT")
