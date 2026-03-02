@@ -1,7 +1,5 @@
 from contextlib import contextmanager
 
-import config
-
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
 from sqlmodel import create_engine, Session
