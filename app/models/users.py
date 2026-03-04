@@ -1,30 +1,45 @@
 from datetime import datetime
+from typing import Any, Callable
 
 from sqlmodel import select
 
 from .models import User
-from database import connect
 
 
-def search_users(query: str) -> list[User]:
+def _default_session_factory() -> Any:
+    from database import connect
+
+    return connect()
+
+
+def search_users(
+    query: str, session_factory: Callable[[], Any] | None = None
+) -> list[User]:
+    session_factory = session_factory or _default_session_factory
     users = []
-    with connect() as session:
+    with session_factory() as session:
         statement = select(User).where(User.gh_login.contains(query))
         selected_users = session.exec(statement)
         if selected_users:
-            users = selected_users.all()
+            users = list(selected_users.all())
     return users
 
 
-def get_user_by_id(id: int) -> User:
+def get_user_by_id(
+    id: int, session_factory: Callable[[], Any] | None = None
+) -> User | None:
+    session_factory = session_factory or _default_session_factory
     user = None
-    with connect() as session:
+    with session_factory() as session:
         statement = select(User).where(User.id == id)
         user = session.exec(statement).first()
     return user
 
 
-def register_user(gh_user_info: dict) -> None:
+def register_user(
+    gh_user_info: dict, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
     created_at = datetime.fromisoformat(gh_user_info["created_at"])
     new_user = User(
         id=gh_user_info["id"],
@@ -36,14 +51,17 @@ def register_user(gh_user_info: dict) -> None:
         gh_type=gh_user_info["type"],
         gh_created_at=created_at,
     )
-    with connect() as session:
+    with session_factory() as session:
         session.add(new_user)
         session.commit()
 
 
-def update_user(gh_user_info: dict) -> None:
+def update_user(
+    gh_user_info: dict, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
     id = gh_user_info["id"]
-    with connect() as session:
+    with session_factory() as session:
         statement = select(User).where(User.id == id)
         updated_user = session.exec(statement).one()
         updated_user.is_active = True
@@ -55,26 +73,33 @@ def update_user(gh_user_info: dict) -> None:
         session.commit()
 
 
-def delete_user(id: int) -> None:
-    with connect() as session:
+def delete_user(id: int, session_factory: Callable[[], Any] | None = None) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
         statement = select(User).where(User.id == id)
         user = session.exec(statement).one()
         session.delete(user)
         session.commit()
 
 
-def authenticate_user(id: int) -> User:
+def authenticate_user(
+    id: int, session_factory: Callable[[], Any] | None = None
+) -> bool:
+    session_factory = session_factory or _default_session_factory
     active_user = False
-    with connect() as session:
+    with session_factory() as session:
         statement = select(User).where(User.id == id)
         user = session.exec(statement).one()
         active_user = user.is_active
     return active_user
 
 
-def update_last_login(user_id: int) -> None:
+def update_last_login(
+    user_id: int, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
     now = datetime.now()
-    with connect() as session:
+    with session_factory() as session:
         statement = select(User).where(User.id == user_id)
         user = session.exec(statement).one()
         user.last_login = now
@@ -82,8 +107,11 @@ def update_last_login(user_id: int) -> None:
         session.commit()
 
 
-def set_user_admin(user_id: int, change_to: bool) -> None:
-    with connect() as session:
+def set_user_admin(
+    user_id: int, change_to: bool, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
         statement = select(User).where(User.id == user_id)
         user = session.exec(statement).one()
         user.is_admin = change_to
@@ -91,8 +119,11 @@ def set_user_admin(user_id: int, change_to: bool) -> None:
         session.commit()
 
 
-def set_user_active(user_id: int, change_to: bool) -> None:
-    with connect() as session:
+def set_user_active(
+    user_id: int, change_to: bool, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
         statement = select(User).where(User.id == user_id)
         user = session.exec(statement).one()
         user.is_active = change_to
