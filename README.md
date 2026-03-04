@@ -9,22 +9,33 @@ one of a project.
 
 A Runfile is provided for your convience. See all commands with `./run`.
 
-`./run restore` fetches all dependencies, and `./run serve` spawns a
-server. To stop the server, run `./run stop`.
+`./run restore` fetches all dependencies, and `./run serve` spawns a server. To
+stop the server, run `./run stop`.
 
-When deploying to production, disable autoreload and hide it behind
-a reverse proxy.
+When deploying to production, disable autoreload and hide it behind a reverse
+proxy.
 
-For this, I recommend using [Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy).
-An example `Caddyfile` is provided for your convenience.
+For this, I recommend using
+[Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy). An example
+`Caddyfile` is provided for your convenience.
 
 To get a GitHub OAuth token and secret, follow [this
 guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app).
 
-## TODO
+## Common tasks
 
-- [x] Database
-- [x] External JavaScript
-- [x] Testing
-- [x] OAuth Authentication
-- [ ] Streaming content
+### Database migrations
+
+Database migrations are handled by `alembic`, and are run on every `./run
+restore`.
+
+To generate a migation automatically, make your changes to
+`app/models/models.py`, then run `uv run alembic revision --autogenerate -m
+"<brief-description>"`.
+
+### Rate limiting
+
+Rate limits are *per-IP address site-wide*, as defined in `app/beforeware.py`.
+Note that this applies to every single request, hence the seemingly generous
+100 requests per minute. As the site gets more complex, you may need to adjust
+this, or consider per-route rate limiting.
