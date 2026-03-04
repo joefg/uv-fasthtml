@@ -1,3 +1,0 @@
-[paths]
-db = database/database.sqlite3
-migrations = app/db/migrations
