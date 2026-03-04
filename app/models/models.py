@@ -4,7 +4,9 @@ from sqlmodel import Field, SQLModel
 
 
 class User(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True, index=True)
+    __table_args__ = {"extend_existing": True}
+
+    id: int = Field(default=None, primary_key=True)
     is_active: bool
     is_admin: bool
     gh_login: str
@@ -17,7 +19,9 @@ class User(SQLModel, table=True):
 
 
 class UserNote(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True, index=True)
+    __table_args__ = {"extend_existing": True}
+
+    id: int = Field(default=None, primary_key=True)
     user_id: int
     note_added_by: int = Field(default=None, foreign_key="user.id")
     note: str

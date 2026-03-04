@@ -1,22 +1,31 @@
+import os
+import tempfile
 from datetime import datetime
 
 import pytest
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
 
-from app.models.models import User
+from app.models.models import User, UserNote
 
 
 @pytest.fixture
 def test_engine():
-    engine = create_engine("sqlite:///:memory:", echo=False)
-    SQLModel.metadata.create_all(engine)
-    return engine
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = os.path.join(tmpdir, "test.db")
+        engine = create_engine(f"sqlite:///{db_path}", echo=False)
+
+        with engine.begin() as conn:
+            User.__table__.create(conn, checkfirst=True)
+            UserNote.__table__.create(conn, checkfirst=True)
+        yield engine
+        engine.dispose()
 
 
 @pytest.fixture
 def test_session(test_engine):
     with Session(test_engine) as session:
         yield session
+        session.rollback()
 
 
 @pytest.fixture
