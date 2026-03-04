@@ -1,263 +1,131 @@
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
+from typing import Any, Callable
 
-import db.database
+from sqlmodel import select
 
-
-@dataclass
-class User:
-    id: int
-    is_active: bool
-    is_admin: bool
-    gh_login: str
-    gh_node_id: str
-    gh_avatar_url: str
-    gh_type: str
-    gh_created_at: datetime
-    creation_date: datetime
-    last_login: datetime
-
-@dataclass
-class UserNote:
-    id: int
-    user_id: int
-    note_added_by: int
-    note: str
-    created_at: datetime
+from .models import User
 
 
-def search_users(query: str) -> list[User]:
+def _default_session_factory() -> Any:
+    from database import connect
+
+    return connect()
+
+
+def search_users(
+    query: str, session_factory: Callable[[], Any] | None = None
+) -> list[User]:
+    session_factory = session_factory or _default_session_factory
     users = []
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            select
-                id,
-                is_active,
-                is_admin,
-                gh_login,
-                gh_node_id,
-                gh_avatar_url,
-                gh_type,
-                gh_created_at,
-                creation_date,
-                last_login
-            from users
-            where gh_login like '%' || :query || '%'
-            limit 15;
-        """
-        cursor.execute(sql, {'query': query})
-        users = cursor.fetchall()
+    with session_factory() as session:
+        statement = select(User).where(User.gh_login.contains(query))
+        selected_users = session.exec(statement)
+        if selected_users:
+            users = list(selected_users.all())
     return users
 
 
-def get_user_by_id(id: int) -> User:
+def get_user_by_id(
+    id: int, session_factory: Callable[[], Any] | None = None
+) -> User | None:
+    session_factory = session_factory or _default_session_factory
     user = None
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            select
-                id,
-                is_active,
-                is_admin,
-                gh_login,
-                gh_node_id,
-                gh_avatar_url,
-                gh_type,
-                gh_created_at,
-                creation_date,
-                last_login
-            from users
-            where users.id = :user_id
-            limit 1;
-        """
-        cursor.execute(sql, {"user_id": id})
-        user = cursor.fetchone()
+    with session_factory() as session:
+        statement = select(User).where(User.id == id)
+        user = session.exec(statement).first()
     return user
 
 
-def register_user(gh_user_info: dict) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            insert into users (
-                id,
-                email,
-                is_active,
-                is_admin,
-                gh_login,
-                gh_node_id,
-                gh_avatar_url,
-                gh_type,
-                gh_created_at
-            ) values (
-                :id,
-                :email,
-                :is_active,
-                :is_admin,
-                :gh_login,
-                :gh_node_id,
-                :gh_avatar_url,
-                :gh_type,
-                :gh_created_at
-            );
-        """
-        params = {
-            "id": gh_user_info['id'],
-            "email": (gh_user_info['email'] or "None provided"),
-            "is_active": True,
-            "is_admin": False,
-            "gh_login": gh_user_info['login'],
-            "gh_node_id": gh_user_info['node_id'],
-            "gh_avatar_url": gh_user_info['avatar_url'],
-            "gh_type": gh_user_info['type'],
-            "gh_created_at": gh_user_info['created_at']
-        }
-        cursor.execute(sql, params)
-        connection.commit()
+def register_user(
+    gh_user_info: dict, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    created_at = datetime.fromisoformat(gh_user_info["created_at"])
+    new_user = User(
+        id=gh_user_info["id"],
+        is_active=True,
+        is_admin=False,
+        gh_login=gh_user_info["login"],
+        gh_node_id=gh_user_info["node_id"],
+        gh_avatar_url=gh_user_info["avatar_url"],
+        gh_type=gh_user_info["type"],
+        gh_created_at=created_at,
+    )
+    with session_factory() as session:
+        session.add(new_user)
+        session.commit()
 
 
-def update_user(gh_user_info: dict) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            update users
-            set
-                id = :id,
-                email = :email,
-                is_active = :is_active,
-                gh_login = :gh_login,
-                gh_node_id = :gh_node_id,
-                gh_avatar_url = :gh_avatar_url,
-                gh_type = :gh_type,
-                gh_created_at = :gh_created_at
-            where id = :id;
-        """
-        params = {
-            "id": gh_user_info['id'],
-            "email": (gh_user_info['email'] or "None provided"),
-            "is_active": True,
-            "gh_login": gh_user_info['login'],
-            "gh_node_id": gh_user_info['node_id'],
-            "gh_avatar_url": gh_user_info['avatar_url'],
-            "gh_type": gh_user_info['type'],
-            "gh_created_at": gh_user_info['created_at']
-        }
-        cursor.execute(sql, params)
-        connection.commit()
+def update_user(
+    gh_user_info: dict, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    id = gh_user_info["id"]
+    with session_factory() as session:
+        statement = select(User).where(User.id == id)
+        updated_user = session.exec(statement).one()
+        updated_user.is_active = True
+        updated_user.gh_login = gh_user_info["login"]
+        updated_user.gh_node_id = gh_user_info["node_id"]
+        updated_user.gh_avatar_url = gh_user_info["avatar_url"]
+        updated_user.gh_type = gh_user_info["type"]
+        session.add(updated_user)
+        session.commit()
 
 
-def delete_user(id: int) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            delete from users
-            where users.id = :id;
-        """
-        params = {"id": id}
-        cursor.execute(sql, params)
+def delete_user(id: int, session_factory: Callable[[], Any] | None = None) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
+        statement = select(User).where(User.id == id)
+        user = session.exec(statement).one()
+        session.delete(user)
+        session.commit()
 
 
-def authenticate_user(id: int) -> Optional[User]:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        sql = """
-            select id, is_active
-            from users
-            where users.id = :id;
-        """
-        params = {"id": id}
-        cursor.execute(sql, params)
-        user = cursor.fetchone()
-        if not user: return None
-        else: return user
+def authenticate_user(
+    id: int, session_factory: Callable[[], Any] | None = None
+) -> bool:
+    session_factory = session_factory or _default_session_factory
+    active_user = False
+    with session_factory() as session:
+        statement = select(User).where(User.id == id)
+        user = session.exec(statement).one()
+        active_user = user.is_active
+    return active_user
 
 
-def update_last_login(user_id: int) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            update users
-            set last_login = current_timestamp
-            where users.id = :user_id;
-        """
-        params = {"user_id": user_id}
-        cursor.execute(sql, params)
-        connection.commit()
+def update_last_login(
+    user_id: int, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    now = datetime.now()
+    with session_factory() as session:
+        statement = select(User).where(User.id == user_id)
+        user = session.exec(statement).one()
+        user.last_login = now
+        session.add(user)
+        session.commit()
 
 
-def set_user_admin(user_id: int, change_to: bool) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            update users
-            set is_admin = :change_to
-            where users.id = :user_id;
-        """
-        params = {"user_id": user_id, "change_to": change_to}
-        cursor.execute(sql, params)
-        connection.commit()
+def set_user_admin(
+    user_id: int, change_to: bool, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
+        statement = select(User).where(User.id == user_id)
+        user = session.exec(statement).one()
+        user.is_admin = change_to
+        session.add(user)
+        session.commit()
 
 
-def set_user_active(user_id: int, change_to: bool) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: User(*row)
-        sql = """
-            update users
-            set is_active = :change_to
-            where users.id = :user_id;
-        """
-        params = {"user_id": user_id, "change_to": change_to}
-        cursor.execute(sql, params)
-        connection.commit()
-
-def get_user_notes(user_id: int) -> list[UserNote]:
-    notes = []
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        cursor.row_factory = lambda _, row: UserNote(*row)
-        sql = """
-            select
-                id,
-                user_id,
-                added_by_id,
-                note,
-                creation_date
-            from user_notes
-            where user_id = :user_id
-            order by creation_date desc;
-        """
-        cursor.execute(sql, {"user_id": user_id})
-        notes = cursor.fetchall()
-    return notes
-
-def add_user_note(user_id: int, added_by_id: int, note: str) -> None:
-    with db.database.db.connect() as connection:
-        cursor = connection.cursor()
-        sql = """
-            insert into user_notes (
-                user_id,
-                note,
-                added_by_id
-            ) values (
-                :user_id,
-                :note,
-                :added_by_id
-            );
-        """
-        params = {
-            "user_id": user_id,
-            "note": note,
-            "added_by_id": added_by_id
-        }
-        cursor.execute(sql, params)
-        connection.commit()
+def set_user_active(
+    user_id: int, change_to: bool, session_factory: Callable[[], Any] | None = None
+) -> None:
+    session_factory = session_factory or _default_session_factory
+    with session_factory() as session:
+        statement = select(User).where(User.id == user_id)
+        user = session.exec(statement).one()
+        user.is_active = change_to
+        session.add(user)
+        session.commit()

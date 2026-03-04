@@ -5,9 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastmigrate>=0.4.0",
+    "alembic>=1.18.4",
     "python-dotenv>=1.1.1",
     "python-fasthtml>=0.12.21",
+    "sqlmodel>=0.0.37",
 ]
 
 [tool.pytest.ini_options]
@@ -15,15 +16,11 @@ pythonpath = [
     ".", "app"
 ]
 
-[tool.pyright]
-include = ["app"]
+[tool.ruff]
 exclude = [
     "**/__pycache__",
+    "migrations/"
 ]
-defineConstant = { DEBUG = true }
-reportMissingImports = "error"
-reportMissingTypeStubs = false
-venvPath = ".venv"
 
 [tool.ruff.lint]
 ignore = [
