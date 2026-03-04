@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.models.models import User, UserNote
+from app.models.models import User
 
 
 @pytest.fixture

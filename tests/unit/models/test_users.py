@@ -1,9 +1,6 @@
-from contextlib import contextmanager
 
-import pytest
-from sqlmodel import Session, create_engine, SQLModel
+from sqlmodel import Session
 
-from app.models.models import User
 from app.models import users as users_model
 
 
