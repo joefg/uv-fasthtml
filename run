@@ -2,12 +2,11 @@
 
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJNAME="$(basename $THISDIR)"
 test -f "$THISDIR/.env" && source "$THISDIR/.env"
 
 function help(){
 cat << EOF
-uv-fasthtml
-
 restore                         : Fetch dependencies
 serve                           : Spawn a server
 stop                            : Kill server
@@ -82,7 +81,8 @@ function run_test(){
 }
 
 function main(){
-	cmd=${1-default}
+  echo "--------- $PROJNAME ---------"
+  cmd=${1-default}
 	shift || true
 	case "$cmd" in
 		default|help)
