@@ -2,7 +2,9 @@
 
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJNAME="$(basename $THISDIR)"
+PROJNAME=$(basename "$THISDIR")
+
+# shellcheck disable=SC1091
 test -f "$THISDIR/.env" && source "$THISDIR/.env"
 
 function help(){
@@ -43,7 +45,8 @@ function run_alembic(){
 }
 
 function run_lint(){
-	uv run ruff check
+  shellcheck "$THISDIR/run"
+  uv run ruff check
 }
 
 function run_unit(){
