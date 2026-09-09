@@ -1,28 +1,35 @@
 _default:
     @just --list --unsorted
 
+# Fetches dependencies and runs migrations.
 restore:
     uv sync
     uv run alembic upgrade head
 
+# Serves, backgrounding.
 serve:
     uv run app/main.py &
 
+# Halts backgrounded service.
 stop:
     # By default the application runs on port 5001.
     # This command finds applications running on port 5001 and
     # kills them.
     lsof -i ":5001" | awk '{print $2}' | tail -n +2 | xargs kill
 
+# Runs developer instance without backgrounding
 dev:
     uv run app/main.py
 
-alembic:
-    uv run alembic "$@"
+# Runs almbic
+alembic CMD:
+    uv run alembic "{{CMD}}"
 
+# Lints codebase
 lint:
     uv run ruff check
 
+# Runs all tests
 test: unit integration #e2e
 
 [group('tests')]
