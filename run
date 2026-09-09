@@ -2,12 +2,13 @@
 
 set -euo pipefail
 THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJNAME=$(basename "$THISDIR")
+
+# shellcheck disable=SC1091
 test -f "$THISDIR/.env" && source "$THISDIR/.env"
 
 function help(){
 cat << EOF
-uv-fasthtml
-
 restore                         : Fetch dependencies
 serve                           : Spawn a server
 stop                            : Kill server
@@ -44,7 +45,8 @@ function run_alembic(){
 }
 
 function run_lint(){
-	uv run ruff check
+  shellcheck "$THISDIR/run"
+  uv run ruff check
 }
 
 function run_unit(){
@@ -82,7 +84,8 @@ function run_test(){
 }
 
 function main(){
-	cmd=${1-default}
+  echo "--------- $PROJNAME ---------"
+  cmd=${1-default}
 	shift || true
 	case "$cmd" in
 		default|help)
