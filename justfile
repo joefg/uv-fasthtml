@@ -17,11 +17,10 @@ serve:
 
 # Halts backgrounded service.
 stop:
-    port=${PORT:-5001}
     # By default the application runs on port 5001.
     # This command finds applications running on port 5001 and
     # kills them.
-    lsof -i ":$port" | awk '{print $2}' | tail -n +2 | xargs kill
+    lsof -i ":5001" | awk '{print $2}' | tail -n +2 | xargs kill
 
 # Runs developer instance without backgrounding
 dev:
