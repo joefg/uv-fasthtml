@@ -4,7 +4,9 @@ from sqlalchemy.engine import Engine
 from sqlalchemy import event
 from sqlmodel import create_engine, Session
 
-engine = create_engine("sqlite:///database/database.sqlite3")
+import config
+
+engine = create_engine(config.DB_CONNECTION)
 
 @event.listens_for(Engine, "connect")
 def _set_sqlite_wal(connection, record):

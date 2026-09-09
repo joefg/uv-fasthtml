@@ -8,6 +8,7 @@ load_dotenv()
 APP_NAME = os.getenv("APP_NAME", "uv-fasthtml")
 FOOTER_TEXT = os.getenv("FOOTER_TEXT", "© uv-fasthtml, 2025 - all rights reserved")
 PORT = os.getenv("PORT", 5001)
+DB_CONNECTION = os.getenv("DB_CONNECTION", "sqlite:///database/database.sqlite3")
 
 # Debug settings
 DEBUG = os.getenv("DEBUG", 'false').lower() == "true"
