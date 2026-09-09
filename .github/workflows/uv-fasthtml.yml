@@ -16,6 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v3
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -26,25 +27,25 @@ jobs:
           python-version-file: "pyproject.toml"
 
       - name: "Install dependencies"
-        run: ./run restore
+        run: just restore
 
       - name: "Run linter"
-        run: ./run lint
+        run: just lint
 
       - name: "Run unit tests"
-        run: ./run test unit
+        run: just unit
 
       - name: "Run integration tests"
-        run: ./run test integration
+        run: just integration
 
       - name: "Install Playwright browsers"
         run: uv run playwright install
 
       - name: "Run server"
-        run: TESTING=true ./run serve
+        run: TESTING=true just serve
 
       - name: "Run e2e tests"
-        run: ./run test e2e
+        run: just e2e
 
       - name: "Kill server"
-        run: ./run stop
+        run: just stop
