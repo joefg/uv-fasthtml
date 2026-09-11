@@ -66,6 +66,7 @@ function main(){
 			;;
 		rollback)
 			run_rollback "$0"
+			;;
 		*)
 			echo "no-op $cmd"
 			;;
