@@ -19,7 +19,7 @@ function run_deploy(){
 	CURRENT_TAG="${CURRENT_TAG:-no_tag}"
 
 	# Stop the service
-	./run stop
+	just stop
 
 	# Take backup of data store
 	mkdir -p database/backups
@@ -31,15 +31,15 @@ function run_deploy(){
 	git checkout "$1"
 
 	# Restore environment and serve
-	./run restore
-	./run serve
+	just restore
+	just serve
 }
 
 function run_rollback(){
 	cd "$THISDIR/.."
 
 	# Stop the service
-	./run stop
+	just stop
 
 	# Restore backup of data store
 	mv "database/backups/$1.database.sqlite3" \
@@ -50,8 +50,8 @@ function run_rollback(){
 	git checkout "$1"
 
 	# Restore environment and serve
-	./run restore
-	./run serve
+	just restore
+	just serve
 }
 
 function main(){
