@@ -7,10 +7,10 @@ one of a project.
 
 ## How to use it
 
-A Runfile is provided for your convience. See all commands with `./run`.
+A justfile is provided for your convience. See all commands with `just`.
 
-`./run restore` fetches all dependencies, and `./run serve` spawns a server. To
-stop the server, run `./run stop`.
+`just restore` fetches all dependencies, and `just serve` spawns a server. To
+stop the server, run `just stop`.
 
 When deploying to production, disable autoreload and hide it behind a reverse
 proxy.
