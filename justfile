@@ -34,6 +34,26 @@ alembic CMD:
 lint:
     uv run ruff check
 
+# Builds docker image
+[group('container')]
+docker-build:
+    docker build . \
+        -t "{{PROJECT_NAME}}-image"
+
+
+# Runs command inside container
+[group('container')]
+docker-run CMD:
+    docker run "{{PROJECT_NAME}}-image" "{{CMD}}"
+
+# Runs shell inside container
+[group('container')]
+docker-shell:
+    docker run -it \
+        --name "{{PROJECT_NAME}}-container" \
+        "{{PROJECT_NAME}}-image" \
+        /bin/bash
+
 # Runs all tests
 test: unit integration #e2e
 
