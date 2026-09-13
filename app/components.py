@@ -66,7 +66,7 @@ def page_content(title, content, links=None, session=None):
             rel="stylesheet",
             href="/static/styles.css"
         ),
-        Script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"),
+        Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
     )
     body = Body(header(title=title, links=links_li), content, footer())
     return Html(head, body)
