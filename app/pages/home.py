@@ -44,7 +44,7 @@ def how_to_use_card():
         Card(
             Ol(
                 Li("Clone this repository;"),
-                Li("Run ", Code("./run restore"), ";"),
+                Li("Run ", Code("just restore"), ";"),
                 Li("Re-initialise repository;"),
                 Li("Build your app and have fun!"),
             )
