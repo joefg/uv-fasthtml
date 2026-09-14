@@ -26,11 +26,11 @@ guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-a
 
 ### Database migrations
 
-Database migrations are handled by `alembic`, and are run on every `restore`.
+Database migrations are run on every `restore`.
 
-To generate a migation automatically, make your changes to
-`app/models/models.py`, then run `uv run alembic revision --autogenerate -m
-"<brief-description>"`.
+To generate a migation automatically, make your changes to a new sql file
+in `migrations`, incrementing the number by one every migration to preserve
+order, then test it with `just migrate`.
 
 ### Rate limiting
 

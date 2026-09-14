@@ -9,7 +9,7 @@ _default:
 # Fetches dependencies and runs migrations.
 restore:
     uv sync
-    uv run alembic upgrade head
+    uv run app/sqlite_utils.py -v
 
 # Serves, backgrounding.
 serve:
@@ -26,9 +26,9 @@ stop:
 dev:
     uv run app/main.py
 
-# Runs almbic
-alembic CMD:
-    uv run alembic "{{CMD}}"
+# Runs database migration
+migrate:
+    uv run app/sqlite_utils.py -v 
 
 # Lints codebase
 lint:
