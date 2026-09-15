@@ -23,7 +23,7 @@ exclude = [
 
 [tool.ruff.lint]
 ignore = [
-    "E701",
+    "E701", # Multiple statements on one line
     "F403", # Star imports
     "F405"  # Star imports
 ]
