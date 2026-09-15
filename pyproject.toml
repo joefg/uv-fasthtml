@@ -5,7 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "alembic>=1.18.4",
     "python-dotenv>=1.1.1",
     "python-fasthtml>=0.12.21",
     "sqlmodel>=0.0.37",
@@ -24,7 +23,7 @@ exclude = [
 
 [tool.ruff.lint]
 ignore = [
-    "E701",
+    "E701", # Multiple statements on one line
     "F403", # Star imports
     "F405"  # Star imports
 ]
