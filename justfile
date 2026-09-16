@@ -26,9 +26,9 @@ stop:
 dev:
     uv run app/main.py
 
-# Runs almbic
-alembic CMD:
-    uv run alembic "{{CMD}}"
+# Runs alembic
+alembic *CMD:
+    uv run alembic {{CMD}}
 
 # Lints codebase
 lint:
