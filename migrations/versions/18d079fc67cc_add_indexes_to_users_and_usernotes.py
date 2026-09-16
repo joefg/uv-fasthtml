@@ -1,7 +1,8 @@
 """add indexes to users and usernotes
 
 Revision ID: 18d079fc67cc
-Revises: 4715e91f2e09
+Revises: 2c93f737c2d1
+
 Create Date: 2026-03-01 18:54:04.045554
 
 """
@@ -16,7 +17,7 @@ from app.models import *
 
 # revision identifiers, used by Alembic.
 revision: str = '18d079fc67cc'
-down_revision: Union[str, Sequence[str], None] = '4715e91f2e09'
+down_revision: Union[str, Sequence[str], None] = '2c93f737c2d1'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
