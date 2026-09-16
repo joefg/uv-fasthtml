@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DB="$THISDIR/../database/database.sqlite3"
+
+function help(){
+cat << EOF
+set-user-ops
+
+Given a user id, it can perform operations on that
+user, namely:
+
+activate <id>     : activate account
+deactivate <id>   : deactivate account
+grant-admin <id>  : grants admin
+revoke-admin <id> : revokes admin
+EOF
+}
+
+function run_grant_admin(){
+	local -r user_id="$1"
+	sqlite3 $DB <<EOF
+		update user
+		set is_admin = 1
+		where id = $user_id;
+EOF
+	echo "Admin granted to user $user_id"
+}
+
+function run_revoke_admin(){
+	local -r user_id="$1"
+	sqlite3 $DB <<EOF
+		update user
+		set is_admin = 0
+		where id = $user_id;
+EOF
+	echo "Admin revoked from user $user_id"
+}
+
+function run_activate(){
+	local -r user_id="$1"
+	sqlite3 $DB <<EOF
+		update user
+		set is_active = 1
+		where id = $user_id;
+EOF
+	echo "User $user_id activated"
+}
+
+function run_deactivate(){
+	local -r user_id="$1"
+	sqlite3 $DB <<EOF
+		update user
+		set is_active = 0
+		where id = $user_id;
+EOF
+	echo "User $user_id deactivated"
+}
+
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help "$@"
+			;;
+		activate)
+			run_activate "$@"
+			;;
+		deactivate)
+			run_deactivate "$@"
+			;;
+		grant-admin)
+			run_grant_admin "$@"
+			;;
+		revoke-admin)
+			run_revoke_admin "$@"
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"
