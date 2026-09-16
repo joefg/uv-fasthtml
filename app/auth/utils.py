@@ -18,8 +18,11 @@ def logout_user(session) -> None:
 
 def get_current_user(session) -> Optional[users_model.User]:
     user_id = session.get("user_id")
-    if not user_id: return None
-    else: return users_model.get_user_by_id(user_id)
+    if user_id:
+        user = users_model.get_user_by_id(user_id)
+        if not user: logout_user(session)
+        else: return user
+    else: return None
 
 
 def is_authenticated(session) -> bool:
