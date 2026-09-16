@@ -1,5 +1,5 @@
 from fasthtml.common import *
-
+from fasthtml.pico import *
 
 def users_blurb():
     return Nav(

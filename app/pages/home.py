@@ -1,8 +1,7 @@
 from fasthtml.common import (
-    Container, Card, Code, Div, Details,
-    H2, Li, Ol, P, Summary, Ul,
+    Code, Div, Details, H2, Li, Ol, P, Summary, Ul,
 )
-
+from fasthtml.pico import Card, Container
 
 def head():
     return Div(H2("uv + FastHTML = ❤️"))

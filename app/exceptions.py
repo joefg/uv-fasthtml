@@ -1,6 +1,5 @@
-from fasthtml.common import (
-    A, Container, H2, P
-)
+from fasthtml.common import A, H2, P
+from fasthtml.pico import Container
 from starlette.background import BackgroundTasks
 
 from alert import telegram as tg_alert
