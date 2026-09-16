@@ -1,8 +1,7 @@
 from fasthtml.common import (
-    Container, Card, Code, Div, Details,
-    H2, Li, Ol, P, Summary, Ul,
+    Code, Div, Details, H2, Li, Ol, P, Summary, Ul,
 )
-
+from fasthtml.pico import Card, Container
 
 def head():
     return Div(H2("uv + FastHTML = ❤️"))
@@ -44,7 +43,7 @@ def how_to_use_card():
         Card(
             Ol(
                 Li("Clone this repository;"),
-                Li("Run ", Code("./run restore"), ";"),
+                Li("Run ", Code("just restore"), ";"),
                 Li("Re-initialise repository;"),
                 Li("Build your app and have fun!"),
             )

@@ -1,6 +1,5 @@
-from fasthtml.common import (
-    Card, Container, H2, P
-)
+from fasthtml.common import H2, P
+from fasthtml.pico import Container, Card
 
 
 def head():
