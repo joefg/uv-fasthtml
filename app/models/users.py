@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import lru_cache
 from typing import Any, Callable
 
 from sqlmodel import select
@@ -12,6 +13,7 @@ def _default_session_factory() -> Any:
     return connect()
 
 
+@lru_cache(32)
 def search_users(
     query: str, session_factory: Callable[[], Any] | None = None
 ) -> list[User]:
