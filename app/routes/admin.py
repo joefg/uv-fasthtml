@@ -1,6 +1,6 @@
 from fasthtml.common import APIRouter, HTTPException
 
-from auth.utils import require_admin
+from auth.utils import require_admin, csrf_protect
 import config
 from components import page_content as page
 
@@ -15,13 +15,14 @@ admin_app = APIRouter("/admin")
 
 @admin_app.get("/")
 @require_admin
-async def get_admin(session):
+async def get_admin(request, session):
     return page(config.APP_NAME, admin_page(), session=session)
 
 
 @admin_app.post("/users")
+@csrf_protect
 @require_admin
-async def search(session, query: str):
+async def search(request, session, query: str):
     results = users_model.search_users(query)
     if not results: return "No user found"
     if len(query) >= 5: return users_table(results)
@@ -29,8 +30,9 @@ async def search(session, query: str):
 
 
 @admin_app.get("/user/{id}")
+@csrf_protect
 @require_admin
-async def get_user(session, id: int):
+async def get_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
     notes = user_notes_model.get_user_notes(id)
     if not user: raise HTTPException(status_code=404)
@@ -39,16 +41,18 @@ async def get_user(session, id: int):
 
 
 @admin_app.get("/user/{id}/notes")
+@csrf_protect
 @require_admin
-async def get_user_notes(session, id: int):
+async def get_user_notes(request, session, id: int):
     notes = user_notes_model.get_user_notes(id)
     if not notes: raise HTTPException(status_code=404)
     return notes_list(notes)
 
 
 @admin_app.post("/user/{id}/add-note")
+@csrf_protect
 @require_admin
-async def add_note(session, id: int, note: str):
+async def add_note(request, session, id: int, note: str):
     existing_notes = user_notes_model.get_user_notes(id)
     if note == "": return notes_list(existing_notes)
     user_notes_model.add_user_note(id, session["user_id"], note)
@@ -57,8 +61,9 @@ async def add_note(session, id: int, note: str):
 
 
 @admin_app.post("/user/{id}/grant-admin")
+@csrf_protect
 @require_admin
-async def grant_admin(session, id: int):
+async def grant_admin(request, session, id: int):
     user = users_model.get_user_by_id(id)
     if not user: raise HTTPException(status_code=404)
     if bool(user.is_admin): raise HTTPException(status_code=409)
@@ -70,8 +75,9 @@ async def grant_admin(session, id: int):
 
 
 @admin_app.post("/user/{id}/revoke-admin")
+@csrf_protect
 @require_admin
-async def revoke_admin(session, id: int):
+async def revoke_admin(request, session, id: int):
     user = users_model.get_user_by_id(id)
     if not user: raise HTTPException(status_code=404)
     if not bool(user.is_admin): raise HTTPException(status_code=409)
@@ -83,8 +89,9 @@ async def revoke_admin(session, id: int):
 
 
 @admin_app.post("/user/{id}/activate")
+@csrf_protect
 @require_admin
-async def activate_user(session, id: int):
+async def activate_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
     if not user: raise HTTPException(status_code=404)
     if bool(user.is_active): raise HTTPException(status_code=409)
@@ -96,8 +103,9 @@ async def activate_user(session, id: int):
 
 
 @admin_app.post("/user/{id}/deactivate")
+@csrf_protect
 @require_admin
-async def deactivate_user(session, id: int):
+async def deactivate_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
     if not user: raise HTTPException(status_code=404)
     if not bool(user.is_active): raise HTTPException(status_code=409)

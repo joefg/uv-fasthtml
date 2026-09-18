@@ -1,3 +1,5 @@
+from json import dumps
+
 from fasthtml.common import *
 
 from auth.utils import get_current_user, is_authenticated, is_admin
@@ -54,6 +56,9 @@ def page_content(title, content, links=None, session=None):
     else:
         links_li.append(A("Login", href="/auth/login"))
 
+    csrf = session.get('csrf')
+    hx_headers={"X-CSRF-TOKEN": csrf} if csrf else {}
+
     head = Head(
         Title(title),
         Meta(name="viewport", content="width=device-width,initial_scale=1.0"),
@@ -69,4 +74,4 @@ def page_content(title, content, links=None, session=None):
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
     )
     body = Body(header(title=title, links=links_li), content, footer())
-    return Html(head, body)
+    return Html(head, body, hx_headers=dumps(hx_headers))
