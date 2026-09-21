@@ -44,6 +44,20 @@ def login_with(label_text, target):
     return A(label_text, href=target)
 
 
+def meta_headers(headers):
+    return [
+        Meta(name=header[0], content=header[1])
+        for header in headers
+    ]
+
+
+def link_headers(headers):
+    return [
+        Link(rel=header[0], href=header[1])
+        for header in headers
+    ]
+
+
 def page_content(title, content, links=None, session=None):
     links_li = links or []
     drop_links = []
@@ -61,16 +75,14 @@ def page_content(title, content, links=None, session=None):
 
     head = Head(
         Title(title),
-        Meta(name="viewport", content="width=device-width,initial_scale=1.0"),
-        Meta(name="description", content=config.APP_DESCRIPTION),
-        Link(
-            rel="stylesheet",
-            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css",
-        ),
-        Link(
-            rel="stylesheet",
-            href="/static/styles.css"
-        ),
+        *meta_headers([
+            ("viewport", "width=device-width,initial_scale=1.0"),
+            ("description", config.APP_DESCRIPTION)
+        ]),
+        *link_headers([
+            ("stylesheet", "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"),
+            ("stylesheet", "/static/styles.css")
+        ]),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
     )
     body = Body(header(title=title, links=links_li), content, footer())
