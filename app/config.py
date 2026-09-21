@@ -4,15 +4,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Application settings
-APP_NAME = os.getenv("APP_NAME", "uv-fasthtml")
-FOOTER_TEXT = os.getenv("FOOTER_TEXT", "© uv-fasthtml, 2025 - all rights reserved")
-PORT = os.getenv("PORT", 5001)
-DB_CONNECTION = os.getenv("DB_CONNECTION", "sqlite:///database/database.sqlite3")
-
 # Debug settings
 DEBUG = os.getenv("DEBUG", 'false').lower() == "true"
 TESTING = os.getenv("TESTING", 'false').lower() == "true"
+
+# Application settings
+APP_NAME = os.getenv("APP_NAME", "uv-fasthtml")
+APP_DESCRIPTION = os.getenv("APP_DESCRIPTION", "A FastHTML template")
+FOOTER_TEXT = os.getenv("FOOTER_TEXT", "© uv-fasthtml, 2026 - all rights reserved")
+PORT = os.getenv("PORT", 5001)
+DB_CONNECTION = os.getenv("DB_CONNECTION", "sqlite:///database/database.sqlite3")
 
 # Telegram alert settings
 TG_TOKEN = os.getenv("TG_TOKEN")
