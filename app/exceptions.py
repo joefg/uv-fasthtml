@@ -4,7 +4,7 @@ from starlette.background import BackgroundTasks
 
 from alert import telegram as tg_alert
 import config
-from components import page_content as page
+from components.page import page_content as page
 
 
 def _error_page(session, header, text):

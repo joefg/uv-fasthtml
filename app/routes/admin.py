@@ -2,7 +2,7 @@ from fasthtml.common import APIRouter, HTTPException
 
 from auth.utils import require_admin, csrf_protect
 import config
-from components import page_content as page
+from components.page import page_content as page
 
 import models.users as users_model
 import models.user_notes as user_notes_model

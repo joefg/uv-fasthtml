@@ -1,7 +1,7 @@
 from fasthtml import APIRouter
 
 import config
-from components import page_content as page
+from components.page import page_content as page
 
 from pages.home import home as home_page
 
