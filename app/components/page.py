@@ -80,8 +80,8 @@ def page_content(title, content, links=None, session=None):
             ("description", config.APP_DESCRIPTION)
         ]),
         *link_headers([
-            ("stylesheet", "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"),
-            ("stylesheet", "/static/styles.css")
+            ("stylesheet", "https://cdn.jsdelivr.net/npm/daisyui@5"),
+            #("stylesheet", "/static/styles.css")
         ]),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
     )
