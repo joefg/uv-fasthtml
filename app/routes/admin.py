@@ -30,7 +30,6 @@ async def search(request, session, query: str):
 
 
 @admin_app.get("/user/{id}")
-@csrf_protect
 @require_admin
 async def get_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
@@ -41,7 +40,6 @@ async def get_user(request, session, id: int):
 
 
 @admin_app.get("/user/{id}/notes")
-@csrf_protect
 @require_admin
 async def get_user_notes(request, session, id: int):
     notes = user_notes_model.get_user_notes(id)

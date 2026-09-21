@@ -62,7 +62,7 @@ def page_content(title, content, links=None, session=None):
     head = Head(
         Title(title),
         Meta(name="viewport", content="width=device-width,initial_scale=1.0"),
-        Meta(name="description", content=f"{title} - Built with FastHTML"),
+        Meta(name="description", content=config.APP_DESCRIPTION),
         Link(
             rel="stylesheet",
             href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css",
