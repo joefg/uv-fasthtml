@@ -8,7 +8,7 @@ import auth.github as github
 
 from alert import telegram
 import config
-from components import page_content as page
+from components.page import page_content as page
 
 from models.users import (
     authenticate_user, get_user_by_id, register_user,
