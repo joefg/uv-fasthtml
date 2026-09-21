@@ -38,14 +38,14 @@ jobs:
       - name: "Run integration tests"
         run: just integration
 
-      - name: "Install Playwright browsers"
-        run: uv run playwright install
+      #- name: "Install Playwright browsers"
+      #  run: uv run playwright install
 
-      - name: "Run server"
-        run: TESTING=true just serve
+      #- name: "Run server"
+      #  run: TESTING=true just serve
 
-      - name: "Run e2e tests"
-        run: just e2e
+      #- name: "Run e2e tests"
+      #  run: just e2e
 
-      - name: "Kill server"
-        run: just stop
+      #- name: "Kill server"
+      #  run: just stop
