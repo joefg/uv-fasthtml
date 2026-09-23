@@ -1,6 +1,6 @@
 from fasthtml.common import APIRouter, HTTPException
 
-from auth.utils import require_admin, csrf_protect
+from auth.utils import require_admin, csrf_protect, from_same_origin
 import config
 from components.page import page_content as page
 
@@ -14,13 +14,14 @@ from pages.admin import (
 admin_app = APIRouter("/admin")
 
 @admin_app.get("/")
+@from_same_origin
 @require_admin
 async def get_admin(request, session):
     return page(config.APP_NAME, admin_page(), session=session)
 
 
 @admin_app.post("/users")
-@csrf_protect
+@from_same_origin
 @require_admin
 async def search(request, session, query: str):
     results = users_model.search_users(query)
@@ -30,6 +31,7 @@ async def search(request, session, query: str):
 
 
 @admin_app.get("/user/{id}")
+@from_same_origin
 @require_admin
 async def get_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
@@ -40,6 +42,7 @@ async def get_user(request, session, id: int):
 
 
 @admin_app.get("/user/{id}/notes")
+@from_same_origin
 @require_admin
 async def get_user_notes(request, session, id: int):
     notes = user_notes_model.get_user_notes(id)
@@ -48,7 +51,7 @@ async def get_user_notes(request, session, id: int):
 
 
 @admin_app.post("/user/{id}/add-note")
-@csrf_protect
+@from_same_origin
 @require_admin
 async def add_note(request, session, id: int, note: str):
     existing_notes = user_notes_model.get_user_notes(id)
@@ -59,7 +62,7 @@ async def add_note(request, session, id: int, note: str):
 
 
 @admin_app.post("/user/{id}/grant-admin")
-@csrf_protect
+@from_same_origin
 @require_admin
 async def grant_admin(request, session, id: int):
     user = users_model.get_user_by_id(id)
@@ -73,6 +76,7 @@ async def grant_admin(request, session, id: int):
 
 
 @admin_app.post("/user/{id}/revoke-admin")
+@from_same_origin
 @csrf_protect
 @require_admin
 async def revoke_admin(request, session, id: int):
@@ -87,7 +91,7 @@ async def revoke_admin(request, session, id: int):
 
 
 @admin_app.post("/user/{id}/activate")
-@csrf_protect
+@from_same_origin
 @require_admin
 async def activate_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
@@ -101,7 +105,7 @@ async def activate_user(request, session, id: int):
 
 
 @admin_app.post("/user/{id}/deactivate")
-@csrf_protect
+@from_same_origin
 @require_admin
 async def deactivate_user(request, session, id: int):
     user = users_model.get_user_by_id(id)
