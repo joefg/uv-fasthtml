@@ -2,22 +2,18 @@ from json import dumps
 
 from fasthtml.common import *
 
+from components.daisy import DyHeader, DyFooter
+
 from auth.utils import get_current_user, is_authenticated, is_admin
 import config
 
 
 def header(current_page="/", title=None, links=None):
     links_li = []
-    if links:
-        links_li = [Li(link) for link in links]
-    nav = Nav(
-        Ul(
-            Li(A(Strong(title or config.APP_NAME), href="/")),
-            Li("A FastHTML template using UV"),
-        ),
-        Ul(*links_li),
-    )
-    return Header(nav, cls="container")
+    if links: links_li = [Li(link) for link in links]
+    left = A(Strong(title or config.APP_NAME), href="/")
+    right = Ul(*links_li) if links_li else None
+    return DyHeader(left, right)
 
 
 def user_dropdown(user_name, links=None):
@@ -36,8 +32,8 @@ def footer(links=None):
     links_li = []
     if links:
         links_li = [Li(link) for link in links]
-    nav = Nav(Small(f"{footer_text}"), *links_li)
-    return Footer(nav, cls="container")
+    nav = Small(f"{footer_text}")
+    return DyFooter(nav, *links_li)
 
 
 def login_with(label_text, target):
@@ -83,7 +79,13 @@ def page_content(title, content, links=None, session=None):
             ("stylesheet", "https://cdn.jsdelivr.net/npm/daisyui@5"),
             #("stylesheet", "/static/styles.css")
         ]),
+        Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
         Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
     )
-    body = Body(header(title=title, links=links_li), content, footer())
+    body = Body(
+        header(title=title, links=links_li),
+        content,
+        footer(),
+        cls="bg-base-100 text-base-content min-h-screen p-8"
+    )
     return Html(head, body, hx_headers=dumps(hx_headers))
