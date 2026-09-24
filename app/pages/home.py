@@ -1,17 +1,20 @@
-from fasthtml.common import (
-    Code, Div, Details, H2, Li, Ol, P, Summary, Ul,
-)
+from fasthtml.common import *
 
 from components.daisy import DyCard, DyContainer
 
 def head():
-    return Div(H2("uv + FastHTML = ❤️"))
+    return Div(
+        H2(
+            "uv + FastHTML = ❤️",
+            cls="font-bold text-7xl text-center"
+        ),
+    )
 
 
 def about_card():
     return Details(
         Summary("What is this?", role="button"),
-        DyCard(
+        Div(
             P(
                 "This is a template aimed at going from Zero to One in a ",
                 "very short span of time. Most things should be set up for ",
@@ -19,36 +22,42 @@ def about_card():
                 "testing methods.",
             ),
             P("All you need to do is clone this repository and build!"),
+            cls="collapse-content"
         ),
+        cls="collapse bg-base-100 border border-base-300"
     )
 
 
 def examples_card():
     return Details(
         Summary("What examples are included?", role="button"),
-        DyCard(
+        Div(
             Ul(
                 Li("Create/Read from a database"),
                 Li("Database migrations"),
                 Li("Using HTMX"),
                 Li("Users and administration"),
                 Li("Automated testing and CI using GitHub Actions"),
-            )
+            ),
+            cls="collapse-content"
         ),
+        cls="collapse bg-base-100 border border-base-300"
     )
 
 
 def how_to_use_card():
     return Details(
         Summary("How do I use it?", role="button"),
-        DyCard(
+        Div(
             Ol(
                 Li("Clone this repository;"),
                 Li("Run ", Code("just restore"), ";"),
                 Li("Re-initialise repository;"),
                 Li("Build your app and have fun!"),
-            )
+            ),
+            cls="collapse-content"
         ),
+        cls="collapse bg-base-100 border border-base-300"
     )
 
 

@@ -2,19 +2,20 @@ from fasthtml.common import *
 from fasthtml.pico import *
 
 def users_blurb():
-    return Nav(
+    return Div(
         Ul(Li(A("Administration")), Li(A("Users", href="#users-table"))),
         aria_label="breadcrumb",
+        cls="breadcrumbs breadcrumbs-lg"
     )
 
 def search_box():
     return Div(
-        H3("Search"),
         Input(
             hx_post="/admin/users", hx_target="#users-table",
             hx_trigger="input changed delay:500ms, search",
             type="search", name="query",
-            placeholder="Start typing GitHub username to search users..."
+            placeholder="Start typing GitHub username to search users...",
+            cls="input input-lg"
         )
     )
 
@@ -87,6 +88,7 @@ def user_card(user, user_notes, hide_operations=False):
             Tr(Td("Last login"), Td(user.last_login)),
             Tr(Td("Active"), Td("Yes" if is_active else "No")),
             Tr(Td("Admin"), Td("Yes" if is_admin else "No")),
+            cls="table table-lg table-pin-rows"
         ),
     )
 
@@ -128,10 +130,11 @@ def user_card(user, user_notes, hide_operations=False):
             cls="grid",
         ),
     )
-    return Card(
+    return Div(
         Div(details, None if hide_operations else operations, id="user-details"),
         Hr(),
-        notes()
+        notes(),
+        cls="overflow-x-auto"
     )
 
 

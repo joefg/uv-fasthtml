@@ -11,9 +11,10 @@ import config
 def header(current_page="/", title=None, links=None):
     links_li = []
     if links: links_li = [Li(link) for link in links]
-    left = A(Strong(title or config.APP_NAME), href="/")
-    right = Ul(*links_li) if links_li else None
-    return DyHeader(left, right)
+    left = None
+    title = A(Strong(title or config.APP_NAME), href="/", cls="button btn-ghost text-xl")
+    right = Ul(*links_li, cls="menu menu-horizontal px-1") if links_li else None
+    return DyHeader(left, title, right)
 
 
 def user_dropdown(user_name, links=None):
@@ -23,7 +24,7 @@ def user_dropdown(user_name, links=None):
             *[Li(link) for link in links] if links else [],
             Li(A("Logout", href="/auth/logout")),
         ),
-        cls="dropdown",
+        cls="bg-base-100 rounded-t-none p-2",
     )
 
 
@@ -32,7 +33,7 @@ def footer(links=None):
     links_li = []
     if links:
         links_li = [Li(link) for link in links]
-    nav = Small(f"{footer_text}")
+    nav = Span(footer_text)
     return DyFooter(nav, *links_li)
 
 

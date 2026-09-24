@@ -10,15 +10,18 @@ hdrs=(
     ),
 )
 
-def DyHeader(left: None, right: None):
+def DyHeader(left: None, title: None, right: None):
     return Div(
-        Div(left, cls="flex-1"),
-        Div(right, cls="flex-none"),
-        cls="navbar bg-base-200 rounded-box"
+        Div(left, cls="navbar-start"),
+        Div(title, cls="navbar-mid"),
+        Div(right, cls="navbar-end"),
+        cls="navbar bg-base-200 rounded-box glass w-1/2 justify-self-center"
     )
 
 def DyFooter(*children):
-    return Div(cls="footer footer-center p-10 bg-base-200 rounded-box text-base-content")(*children)
+    return Footer(
+        cls="footer footer-center bg-base-200 rounded-box p-6 text-base-content glass w-1/2"
+    )(*children)
 
 def DySection(title, *children):
     return Div(cls="mb-8")(
@@ -26,7 +29,7 @@ def DySection(title, *children):
         Div(cls="flex flex-wrap gap-4")(*children),
     )
 
-def DyContainer(*children): return Div(cls="bg-base-100 text-base-content min-h-screen p-8")(*children)
+def DyContainer(*children): return Div(cls="bg-base-100 text-base-content p-8")(*children)
 
 def DyCard(*children):
     return Div(
