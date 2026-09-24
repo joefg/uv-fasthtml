@@ -1,6 +1,6 @@
 from fasthtml.common import APIRouter, HTTPException
 
-from auth.utils import require_admin, csrf_protect, from_same_origin
+from auth.utils import require_admin, from_same_origin
 import config
 from components.page import page_content as page
 
