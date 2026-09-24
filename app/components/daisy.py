@@ -30,10 +30,9 @@ def DyContainer(*children): return Div(cls="bg-base-100 text-base-content min-h-
 
 def DyCard(*children):
     return Div(
-        Figure(),
+        *children,
         cls="card w-64 bg-base-100 shadow-x1"
     )
-    return Div(cls="bg-base-100 text-base-content min-h-screen p-8")(*children)
 
 def DyButton(size: None, modifier: None, state: None, text):
     classes="btn "
