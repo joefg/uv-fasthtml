@@ -78,7 +78,6 @@ async def grant_admin(request, session, id: int):
 
 @admin_app.post("/user/{id}/revoke-admin")
 @from_same_origin
-@csrf_protect
 @require_admin
 async def revoke_admin(request, session, id: int):
     user = users_model.get_user_by_id(id)
