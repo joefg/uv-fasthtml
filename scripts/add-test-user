@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DB="$THISDIR/../database/database.sqlite3"
+
+function help(){
+cat << EOF
+add-test-user
+
+creates a new test user, non-admin.
+
+username = "foo_test_user"
+id = 0
+EOF
+}
+
+function run_add(){
+	sqlite3 $DB <<EOF
+		insert into user (
+			id,
+			is_active,
+			is_admin,
+			gh_login,
+			gh_node_id,
+			gh_avatar_url,
+			gh_type,
+			gh_created_at,
+			creation_date
+		) values (
+			0,
+			1,
+			0,
+			'foo-test-user',
+			'000000',
+			'http://github.com/ghost',
+			'User',
+			'2026-09-23 10:09:41.123456',
+			'2026-09-23 10:09:41.123456'
+		);
+EOF
+	echo "Test user created."
+}
+
+function run_remove(){
+	sqlite3 $DB <<EOF
+		delete from user
+		where id = 0;
+EOF
+	echo "Test user deleted."
+}
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help "$@"
+			;;
+		add)
+			run_add
+			;;
+		remove)
+			run_remove
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"

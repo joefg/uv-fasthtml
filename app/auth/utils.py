@@ -36,6 +36,15 @@ def is_csrf_token_valid(request, session) -> bool:
     return request.headers['x-csrf-token'] == session['csrf']
 
 
+def is_same_origin(request) -> bool:
+    if 'Sec-Fetch-Site' not in request.headers: return True
+    return request.headers['Sec-Fetch-Site'] in (
+        'same-origin', # From the same domain
+        'same-site',   # From the same site
+        'none'         # Where it's not set, e.g. direct access
+    )
+
+
 def is_active(session) -> bool:
     if not is_authenticated(session): return False
     user = users_model.get_user_by_id(session["user_id"])
@@ -59,12 +68,21 @@ def csrf_protect(func):
     return wrapper
 
 
+def from_same_origin(func):
+    @wraps(func)
+    async def wrapper(request, session, *args, **kwargs):
+        if not is_same_origin(request):
+            raise HTTPException(status_code=403)
+        return await func(request, session, *args, **kwargs)
+    return wrapper
+
+
 def require_auth(func):
     @wraps(func)
-    async def wrapper(session, *args, **kwargs):
+    async def wrapper(request, session, *args, **kwargs):
         if not is_authenticated(session):
             raise HTTPException(status_code=404)
-        return await func(session, *args, **kwargs)
+        return await func(request, session, *args, **kwargs)
     return wrapper
 
 
