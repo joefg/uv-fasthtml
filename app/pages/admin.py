@@ -129,9 +129,10 @@ def user_card(user, user_notes, hide_operations=False):
         ),
     )
     return Card(
-        Div(details, None if hide_operations else operations, id="user-details"),
+        Div(details, None if hide_operations else operations),
         Hr(),
-        notes()
+        notes,
+        id="user-details"
     )
 
 

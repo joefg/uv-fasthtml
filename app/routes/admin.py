@@ -71,8 +71,9 @@ async def grant_admin(request, session, id: int):
     if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_admin(user.id, True)
-        ret = users_model.get_user_by_id(user.id)
-    return user_card(ret)
+        user = users_model.get_user_by_id(user.id)
+        updated_notes = user_notes_model.get_user_notes(id)
+    return user_card(user, updated_notes)
 
 
 @admin_app.post("/user/{id}/revoke-admin")
@@ -86,8 +87,9 @@ async def revoke_admin(request, session, id: int):
     if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_admin(user.id, False)
-        ret = users_model.get_user_by_id(user.id)
-    return user_card(ret)
+        user = users_model.get_user_by_id(user.id)
+        updated_notes = user_notes_model.get_user_notes(id)
+    return user_card(user, updated_notes)
 
 
 @admin_app.post("/user/{id}/activate")
@@ -100,8 +102,9 @@ async def activate_user(request, session, id: int):
     if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_active(user.id, True)
-        ret = users_model.get_user_by_id(user.id)
-    return user_card(ret)
+        user = users_model.get_user_by_id(user.id)
+        updated_notes = user_notes_model.get_user_notes(id)
+    return user_card(user, updated_notes)
 
 
 @admin_app.post("/user/{id}/deactivate")
@@ -114,5 +117,6 @@ async def deactivate_user(request, session, id: int):
     if session["user_id"] == id: raise HTTPException(status_code=400)
     else:
         users_model.set_user_active(user.id, False)
-        ret = users_model.get_user_by_id(user.id)
-    return user_card(ret)
+        user = users_model.get_user_by_id(user.id)
+        updated_notes = user_notes_model.get_user_notes(id)
+    return user_card(user, updated_notes)
