@@ -1,6 +1,6 @@
 from fasthtml.common import APIRouter, HTTPException
 
-from auth.utils import require_admin, csrf_protect, from_same_origin
+from auth.utils import require_admin, from_same_origin
 import config
 from components.page import page_content as page
 
@@ -78,7 +78,6 @@ async def grant_admin(request, session, id: int):
 
 @admin_app.post("/user/{id}/revoke-admin")
 @from_same_origin
-@csrf_protect
 @require_admin
 async def revoke_admin(request, session, id: int):
     user = users_model.get_user_by_id(id)
