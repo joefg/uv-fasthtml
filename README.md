@@ -7,7 +7,7 @@ one of a project.
 
 ## How to use it
 
-A justfile is provided for your convience. See all commands with `just`.
+A justfile is provided for your convenience. See all commands with `just`.
 
 `just restore` fetches all dependencies, and `just serve` spawns a server. To
 stop the server, run `just stop`.
@@ -28,7 +28,7 @@ guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-a
 
 Database migrations are handled by `alembic`, and are run on every `restore`.
 
-To generate a migation automatically, make your changes to
+To generate a migration automatically, make your changes to
 `app/models/models.py`, then run `uv run alembic revision --autogenerate -m
 "<brief-description>"`.
 
