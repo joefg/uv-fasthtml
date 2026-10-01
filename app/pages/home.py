@@ -1,15 +1,13 @@
-from fasthtml.common import (
-    Code, Div, Details, H2, Li, Ol, P, Summary, Ul,
-)
-from fasthtml.pico import Card, Container
+from fasthtml.common import *
+from fasthtml.pico import *
 
 def head():
     return Div(H2("uv + FastHTML = ❤️"))
 
 
 def about_card():
-    return Details(
-        Summary("What is this?", role="button"),
+    return Article(
+        Header(B("What is this?")),
         Card(
             P(
                 "This is a template aimed at going from Zero to One in a ",
@@ -23,23 +21,23 @@ def about_card():
 
 
 def examples_card():
-    return Details(
-        Summary("What examples are included?", role="button"),
+    return Article(
+        Header(B("What's included?")),
         Card(
             Ul(
-                Li("Create/Read from a database"),
-                Li("Database migrations"),
+                Li("CRUD to/from a database"),
+                Li("Database administration"),
                 Li("Using HTMX"),
-                Li("Users and administration"),
                 Li("Automated testing and CI using GitHub Actions"),
             )
         ),
+        style="height: 350px;"
     )
 
 
 def how_to_use_card():
-    return Details(
-        Summary("How do I use it?", role="button"),
+    return Article(
+        Header(B("How do I use it?")),
         Card(
             Ol(
                 Li("Clone this repository;"),
@@ -48,8 +46,13 @@ def how_to_use_card():
                 Li("Build your app and have fun!"),
             )
         ),
+        style="height: 350px;"
     )
 
 
 def home():
-    return Container(head(), about_card(), examples_card(), how_to_use_card())
+    return Container(
+        head(),
+        about_card(),
+        Grid(examples_card(), how_to_use_card())
+    )
