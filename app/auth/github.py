@@ -2,7 +2,7 @@ from fasthtml.common import Button
 from fasthtml.oauth import GitHubAppClient, redir_url, _AppClient
 
 import config
-from icons import github as github_icon
+from components.icons import github as github_icon
 
 auth_callback = "/auth/oauth-redirect"
 
