@@ -17,3 +17,25 @@ def telegram():
 </svg>
 """
     return NotStr(icon)
+
+
+def x():
+    icon = """<svg xmlns="http://www.w3.org/2000/svg" height="1rem" width="100%" viewBox="0 0 512 512" class="icon-x"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path></svg>
+"""
+    return NotStr(icon)
+
+
+def burger():
+    icon = """
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="1rem" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon-menu"><path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path></svg>
+"""
+    return NotStr(icon)
+
+
+def home():
+    icon = """
+<svg width="100%" height="1rem" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="none">
+<path d="M1 6V15H6V11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V15H15V6L8 0L1 6Z" fill="#000000"/>
+</svg>
+"""
+    return NotStr(icon)

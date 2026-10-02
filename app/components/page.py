@@ -4,14 +4,16 @@ from fasthtml.common import *
 
 from auth.utils import get_current_user, is_authenticated, is_admin
 import config
+import components.icons as icons
 
 
 def header(title=None, links=None):
     links_li = (Li(link) for link in links) if links else ()
     nav = Nav(
         Ul(
-            Li(A(Strong(title or config.APP_NAME), href="/"))
+            Li(A(icons.home(), href="/")),
         ),
+        Ul(Li(Strong(title or config.APP_NAME))),
         Ul(*links_li),
     )
     return Header(nav)
