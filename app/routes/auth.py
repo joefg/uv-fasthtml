@@ -5,8 +5,9 @@ from starlette.background import BackgroundTasks
 
 import auth.utils
 import auth.github as github
+import auth.telegram as tg
 
-from alert import telegram
+from alert import telegram as tg_msg
 import config
 from components.page import page_content as page
 
@@ -26,13 +27,14 @@ def alert_new_signup(username: str):
         f"{username} has signed up!"
     )
 
-    telegram(msg=alert_message)
+    tg_msg(msg=alert_message)
 
 
 @auth_app.get("/login")
 async def login(request, session):
     login_forms = [
         github.auth.login_button(request),
+        tg.login_button(request)
     ]
     return page(
         config.APP_NAME,
