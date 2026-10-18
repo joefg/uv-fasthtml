@@ -51,6 +51,13 @@ def link_headers(headers):
     )
 
 
+def js_headers(headers):
+    return (
+        Script(type=header[0], src=header[1])
+        for header in headers
+    )
+
+
 def page_content(title, content, links=None, session=None):
     links_li = links or []
     drop_links = []
@@ -72,11 +79,14 @@ def page_content(title, content, links=None, session=None):
             ("viewport", "width=device-width,initial_scale=1.0"),
             ("description", config.APP_DESCRIPTION)
         )),
-        *link_headers((
-            ("stylesheet", "https://cdn.jsdelivr.net/npm/@anyblades/blades@3/css/blades.min.css"),
-            ("stylesheet", "/static/styles.css")
+        *js_headers((
+            ("module", "https://ka-f.webawesome.com/webawesome@3.14.0/webawesome.loader.js"),
+            (None, "https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js")
         )),
-        Script(src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"),
+        *link_headers((
+            ("stylesheet", "https://ka-f.webawesome.com/webawesome@3.14.0/styles/themes/default.css"),
+            ("stylesheet", "https://ka-f.webawesome.com/webawesome@3.14.0/styles/utilities.css")
+        ))
     )
     body = Body(header(title=title, links=links_li), content, footer())
-    return Html(head, body, hx_headers=dumps(hx_headers))
+    return Html(head, body, cls="wa-theme-dark wa-palette-default wa-brand-blue", hx_headers=dumps(hx_headers))
