@@ -1,6 +1,9 @@
 from json import dumps
 
 from fasthtml.common import *
+from fasthtml.components import (
+    Wa_page
+)
 
 from auth.utils import get_current_user, is_authenticated, is_admin
 import config
@@ -9,14 +12,13 @@ import components.icons as icons
 
 def header(title=None, links=None):
     links_li = (Li(link) for link in links) if links else ()
-    nav = Nav(
-        Ul(
-            Li(A(icons.home(), href="/")),
-        ),
-        Ul(Li(Strong(title or config.APP_NAME))),
-        Ul(*links_li),
+    content = Div(
+        A(icons.home(), href="/"),
+        Strong(title or config.APP_NAME),
+        *links_li,
+        cls="wa-cluster"
     )
-    return Header(nav)
+    return Header(content, slot="header")
 
 
 def user_dropdown(user_name, links=None):
@@ -88,5 +90,5 @@ def page_content(title, content, links=None, session=None):
             ("stylesheet", "https://ka-f.webawesome.com/webawesome@3.14.0/styles/utilities.css")
         ))
     )
-    body = Body(header(title=title, links=links_li), content, footer())
+    body = Wa_page(header(title=title, links=links_li), content, footer())
     return Html(head, body, cls="wa-theme-dark wa-palette-default wa-brand-blue", hx_headers=dumps(hx_headers))
